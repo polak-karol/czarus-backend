@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
+from flask_migrate import Migrate
 from dotenv import load_dotenv
 from marshmallow import ValidationError
 
@@ -13,14 +14,19 @@ load_dotenv('.env', verbose=True)
 app.config.from_object("default_config")
 app.config.from_envvar("APPLICATION_SETTINGS")
 api = Api(app)
+jwt = JWTManager(app)
+db.init_app(app)
+migrate = Migrate(app, db)
+
+
+@app.before_first_request
+def create_tables():
+    db.create_all(app=app)
 
 
 @app.errorhandler(ValidationError)
 def handle_marshmallow_validation(error):
     return jsonify(error.messages), 400
-
-
-jwt = JWTManager(app)
 
 
 @jwt.token_in_blocklist_loader
@@ -34,6 +40,5 @@ def index():
 
 
 if __name__ == "__main__":
-    db.init_app(app)
     ma.init_app(app)
     app.run(host="0.0.0.0", port=5000)
