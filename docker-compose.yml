@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  czarus-backend:
+    image: backend
+    build: ./czarus-backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./czarus-backend:/usr/src/app
+  czarus-db:
+    image: postgres:14.7
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+    volumes:
+      - czarus-data:/var/lib/postgresql/data
+
+volumes:
+  czarus-data:
+  backend:
