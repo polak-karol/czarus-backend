@@ -13,4 +13,4 @@ WORKDIR /usr/src/app
 
 ENTRYPOINT [ "python" ]
 
-CMD [ "main.py" ]
+CMD [ "app.py" ]

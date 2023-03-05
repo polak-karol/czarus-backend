@@ -8,6 +8,7 @@ from marshmallow import ValidationError
 from db import db
 from ma import ma
 from blocklist import BLOCKLIST
+from resources.drawer import Drawer
 
 app = Flask(__name__)
 load_dotenv('.env', verbose=True)
@@ -34,9 +35,7 @@ def check_if_token_in_blocklist(jwt_header, jwt_payload):
     return jwt_payload['jti'] in BLOCKLIST
 
 
-@app.route('/')
-def index():
-    return "Hello"
+api.add_resource(Drawer, "/drawer/<string:guild_id>/<string:user_id>/<string:drawer_type>")
 
 
 if __name__ == "__main__":
