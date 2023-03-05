@@ -22,7 +22,7 @@ migrate = Migrate(app, db)
 
 @app.before_first_request
 def create_tables():
-    db.create_all(app=app)
+    db.create_all()
 
 
 @app.errorhandler(ValidationError)
@@ -35,7 +35,7 @@ def check_if_token_in_blocklist(jwt_header, jwt_payload):
     return jwt_payload['jti'] in BLOCKLIST
 
 
-api.add_resource(Drawer, "/drawer/<string:guild_id>/<string:user_id>/<string:drawer_type>")
+api.add_resource(Drawer, "/drawer/<string:guild_id>/<string:user_id>/<string:draw_type>")
 
 
 if __name__ == "__main__":
