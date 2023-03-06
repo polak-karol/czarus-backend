@@ -15,4 +15,8 @@ def get_closest_date_of_weekday(date, day):
 
 def is_date_in_current_week(date):
     current_date = datetime.datetime.today()
-    return get_closest_date_of_weekday(current_date, 6) >= date <= get_closest_date_of_weekday(current_date, 0)
+    return (
+        get_closest_date_of_weekday(current_date, 6)
+        >= date
+        <= get_closest_date_of_weekday(current_date, 0)
+    )

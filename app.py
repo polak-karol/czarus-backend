@@ -9,6 +9,7 @@ from db import db
 from ma import ma
 from blocklist import BLOCKLIST
 from resources.drawer import Drawer
+from resources.holiday import Holiday
 
 app = Flask(__name__)
 load_dotenv(".env", verbose=True)
@@ -18,11 +19,6 @@ api = Api(app)
 jwt = JWTManager(app)
 db.init_app(app)
 migrate = Migrate(app, db)
-
-
-@app.before_first_request
-def create_tables():
-    db.create_all()
 
 
 @app.errorhandler(ValidationError)
@@ -36,6 +32,7 @@ def check_if_token_in_blocklist(jwt_header, jwt_payload):
 
 
 api.add_resource(Drawer, "/drawer")
+api.add_resource(Holiday, "/holiday")
 
 
 if __name__ == "__main__":
