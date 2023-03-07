@@ -9,41 +9,45 @@ birthday_schema = BirthdaySchema()
 
 class Birthday(Resource):
     @classmethod
-    def get(cls):
-        birthday = BirthdayModel.find_birthday_by_user_id(request.args["guild_id"], request.args["user_id"]).first()
+    def get(cls, guild_id):
+        birthday = BirthdayModel.find_birthday_by_user_id(guild_id, request.args["user_id"]).first()
+
         if not birthday:
             return {"message": "Not found"}, 404
+
         return {"message": birthday_schema.dump(birthday)}, 200
 
     @classmethod
-    def put(cls):
+    def put(cls, guild_id):
         birthday_json = request.get_json()
-        birthday = BirthdayModel.find_birthday_by_user_id(birthday_json["guild_id"], birthday_json["user_id"]).first()
+        birthday_json["guild_id"] = guild_id
+        birthday = BirthdayModel.find_birthday_by_user_id(guild_id, birthday_json["user_id"]).first()
 
         if birthday:
             return birthday_schema.dump(birthday), 200
 
         birthday = birthday_schema.load(birthday_json)
-
         birthday.save_to_db()
 
         return birthday_schema.dump(birthday), 200
 
     @classmethod
-    def delete(cls):
-        birthday = BirthdayModel.find_birthday_by_user_id(request.args["guild_id"], request.args["user_id"]).first()
+    def delete(cls, guild_id):
+        birthday = BirthdayModel.find_birthday_by_user_id(guild_id, request.args["user_id"]).first()
 
         if not birthday:
             return {"message": "Item not found"}, 404
 
         birthday.delete_from_db()
+
         return {"message": "Item deleted"}, 200
 
 
 class BirthdayList(Resource):
     @classmethod
-    def get(cls):
-        birthdays = BirthdayModel.find_birthday_by_date(request.args["guild_id"], request.args["date"])
+    def get(cls, guild_id):
+        birthdays = BirthdayModel.find_birthday_by_date(guild_id, request.args["date"])
+
         if not birthdays:
             return {"message": "Not found"}, 404
 

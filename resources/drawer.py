@@ -10,14 +10,6 @@ drawer_schema = DrawerSchema()
 
 class Drawer(Resource):
     @classmethod
-    def get(cls, user_id, guild_id, draw_type):
-        drawer = DrawerModel.find_drawer(guild_id, user_id, draw_type).first()
-        if not drawer:
-            return {"message": "Not found"}, 404
-
-        return {"message": drawer}, 200
-
-    @classmethod
     def put(cls):
         drawer_json = request.get_json()
         drawer = DrawerModel.find_drawer(

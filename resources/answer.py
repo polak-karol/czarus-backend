@@ -9,17 +9,20 @@ answer_schema = AnswerSchema()
 
 class Answer(Resource):
     @classmethod
-    def get(cls):
-        answer = AnswerModel.find_answer(request.args["guild_id"]).first()
+    def get(cls, guild_id):
+        answer = AnswerModel.find_answer(guild_id).first()
+
         if not answer:
             return {"message": "Not found"}, 404
+
         return {"message": answer_schema.dump(answer)}, 200
 
     @classmethod
-    def put(cls):
+    def put(cls, guild_id):
         answer_json = request.get_json()
-        answer_query = AnswerModel.find_answer(answer_json["guild_id"])
+        answer_query = AnswerModel.find_answer(guild_id)
         answer = answer_query.first()
+
         if not answer:
             answer = answer_schema.load(answer_json)
         else:

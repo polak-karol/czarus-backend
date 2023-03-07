@@ -33,11 +33,11 @@ def check_if_token_in_blocklist(jwt_header, jwt_payload):
     return jwt_payload["jti"] in BLOCKLIST
 
 
-api.add_resource(Drawer, "/drawer")
-api.add_resource(Holiday, "/holiday")
-api.add_resource(Birthday, "/birthday")
-api.add_resource(BirthdayList, "/birthday/list")
-api.add_resource(Answer, "/answer")
+api.add_resource(Drawer, "/drawer/<string:guild_id>")
+api.add_resource(Holiday, "/holiday/<string:guild_id>")
+api.add_resource(Birthday, "/birthday/<string:guild_id>")
+api.add_resource(BirthdayList, "/birthday/list/<string:guild_id>")
+api.add_resource(Answer, "/answer/<string:guild_id>")
 
 
 if __name__ == "__main__":
