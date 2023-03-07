@@ -29,6 +29,16 @@ class Birthday(Resource):
 
         return birthday_schema.dump(birthday), 200
 
+    @classmethod
+    def delete(cls):
+        birthday = BirthdayModel.find_birthday_by_user_id(request.args["guild_id"], request.args["user_id"]).first()
+
+        if not birthday:
+            return {"message": "Item not found"}, 404
+
+        birthday.delete_from_db()
+        return {"message": "Item deleted"}, 200
+
 
 class BirthdayList(Resource):
     @classmethod
