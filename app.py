@@ -10,6 +10,7 @@ from ma import ma
 from blocklist import BLOCKLIST
 from resources.drawer import Drawer
 from resources.holiday import Holiday
+from resources.birthday import Birthday
 
 app = Flask(__name__)
 load_dotenv(".env", verbose=True)
@@ -33,6 +34,8 @@ def check_if_token_in_blocklist(jwt_header, jwt_payload):
 
 api.add_resource(Drawer, "/drawer")
 api.add_resource(Holiday, "/holiday")
+api.add_resource(Birthday, "/birthday")
+api.add_resource(Birthday, "/birthday/user", endpoint="/birthday/get_by_user")
 
 
 if __name__ == "__main__":
