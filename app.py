@@ -11,6 +11,7 @@ from blocklist import BLOCKLIST
 from resources.drawer import Drawer
 from resources.holiday import Holiday
 from resources.birthday import Birthday, BirthdayList
+from resources.answer import Answer
 
 app = Flask(__name__)
 load_dotenv(".env", verbose=True)
@@ -36,6 +37,7 @@ api.add_resource(Drawer, "/drawer")
 api.add_resource(Holiday, "/holiday")
 api.add_resource(Birthday, "/birthday")
 api.add_resource(BirthdayList, "/birthday/list")
+api.add_resource(Answer, "/answer")
 
 
 if __name__ == "__main__":
