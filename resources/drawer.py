@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import request
 
-from helpers.global_functions import is_date_in_current_week
+from helpers.DateTimeHelper import DateTimeHelper
 from schemas.drawer import DrawerSchema
 from models.drawer import DrawerModel
 
@@ -17,7 +17,7 @@ class Drawer(Resource):
         ).first()
 
         if drawer:
-            if is_date_in_current_week(drawer.updated_at):
+            if DateTimeHelper.is_date_in_current_week(drawer.updated_at):
                 return {
                     "message": "User already draw in this week.",
                     "last_vote_date": drawer.updated_at.isoformat(),
