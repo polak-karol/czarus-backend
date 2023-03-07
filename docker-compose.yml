@@ -2,12 +2,12 @@ version: "3.9"
 
 services:
   czarus-backend:
-    image: backend
-    build: ./czarus-backend
+    image: czarus-backend
+    build: .
     ports:
       - "5000:5000"
     volumes:
-      - ./czarus-backend:/usr/src/app
+      - .:/usr/src/app
   czarus-db:
     image: postgres:14.7
     ports:

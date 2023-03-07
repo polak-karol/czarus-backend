@@ -1,7 +1,7 @@
 import os
 
 DEBUG = True
-SQLALCHEMY_DATABASE_URI = "postgresql:///czarus:czarus@localhost:5432/czarus"
+SQLALCHEMY_DATABASE_URI = "postgresql://czarus:czarus@localhost:5432/czarus"
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 PROPAGATE_EXCEPTIONS = True
 SECRET_KEY = os.getenv("JWT_SECRET_KEY")
