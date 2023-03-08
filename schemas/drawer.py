@@ -1,11 +1,11 @@
 from marshmallow_enum import EnumField
 
-from ma import ma
+from schemas.CamelCaseSchema import CamelCaseSchema
 from models.drawer import DrawerModel
 from helpers.EnumDrawerType import EnumDrawerType
 
 
-class DrawerSchema(ma.SQLAlchemyAutoSchema):
+class DrawerSchema(CamelCaseSchema):
     draw_type = EnumField(EnumDrawerType)
 
     class Meta:

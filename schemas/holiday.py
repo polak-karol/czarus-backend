@@ -1,8 +1,8 @@
-from ma import ma
+from schemas.CamelCaseSchema import CamelCaseSchema
 from models.holiday import HolidayModel
 
 
-class HolidaySchema(ma.SQLAlchemyAutoSchema):
+class HolidaySchema(CamelCaseSchema):
     class Meta:
         model = HolidayModel
         load_instance = True

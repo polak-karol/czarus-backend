@@ -1,8 +1,9 @@
-from ma import ma
+
 from models.birthday import BirthdayModel
+from schemas.CamelCaseSchema import CamelCaseSchema
 
 
-class BirthdaySchema(ma.SQLAlchemyAutoSchema):
+class BirthdaySchema(CamelCaseSchema):
     class Meta:
         model = BirthdayModel
         load_instance = True

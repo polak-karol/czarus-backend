@@ -1,8 +1,8 @@
-from ma import ma
+from schemas.CamelCaseSchema import CamelCaseSchema
 from models.answer import AnswerModel
 
 
-class AnswerSchema(ma.SQLAlchemyAutoSchema):
+class AnswerSchema(CamelCaseSchema):
     class Meta:
         model = AnswerModel
         load_instance = True
