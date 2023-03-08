@@ -15,13 +15,13 @@ class Birthday(Resource):
         if not birthday:
             return {"message": "Not found"}, 404
 
-        return {"message": birthday_schema.dump(birthday)}, 200
+        return {"data": birthday_schema.dump(birthday)}, 200
 
     @classmethod
     def put(cls, guild_id):
         birthday_json = request.get_json()
-        birthday_json["guild_id"] = guild_id
-        birthday = BirthdayModel.find_birthday_by_user_id(guild_id, birthday_json["user_id"]).first()
+        birthday_json["guildId"] = guild_id
+        birthday = BirthdayModel.find_birthday_by_user_id(guild_id, birthday_json["userId"]).first()
 
         if birthday:
             return birthday_schema.dump(birthday), 200
@@ -29,7 +29,7 @@ class Birthday(Resource):
         birthday = birthday_schema.load(birthday_json)
         birthday.save_to_db()
 
-        return birthday_schema.dump(birthday), 200
+        return {"data": birthday_schema.dump(birthday)}, 200
 
     @classmethod
     def delete(cls, guild_id):
@@ -54,4 +54,4 @@ class BirthdayList(Resource):
         if not birthdays:
             return {"message": "Not found"}, 404
 
-        return {"message": birthday_schema.dump(birthdays, many=True)}, 200
+        return {"data": birthday_schema.dump(birthdays, many=True)}, 200
