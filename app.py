@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from flask_cors import CORS, cross_origin
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
@@ -14,6 +15,7 @@ from resources.birthday import Birthday, BirthdayList
 from resources.answer import Answer
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
 load_dotenv(".env", verbose=True)
 app.config.from_object("default_config")
 app.config.from_envvar("APPLICATION_SETTINGS")
@@ -42,4 +44,4 @@ api.add_resource(Answer, "/answer/<string:guild_id>")
 
 if __name__ == "__main__":
     ma.init_app(app)
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5001)

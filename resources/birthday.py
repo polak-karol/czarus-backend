@@ -46,7 +46,10 @@ class Birthday(Resource):
 class BirthdayList(Resource):
     @classmethod
     def get(cls, guild_id):
-        birthdays = BirthdayModel.find_birthday_by_date(guild_id, request.args["date"])
+        if "date" in request.args:
+            birthdays = BirthdayModel.find_birthday_by_date(guild_id, request.args["date"])
+        else:
+            birthdays = BirthdayModel.find_birthday_by_guild_id(guild_id)
 
         if not birthdays:
             return {"message": "Not found"}, 404
