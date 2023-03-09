@@ -7,10 +7,10 @@ class CamelCaseSchema(ma.SQLAlchemyAutoSchema):
     """
 
     @classmethod
-    def camelcase(cls, s):
+    def __camelcase(cls, s):
         parts = iter(s.split("_"))
         return next(parts) + "".join(i.title() for i in parts)
 
     @classmethod
     def on_bind_field(cls, field_name, field_obj):
-        field_obj.data_key = cls.camelcase(field_obj.data_key or field_name)
+        field_obj.data_key = cls.__camelcase(field_obj.data_key or field_name)

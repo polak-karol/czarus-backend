@@ -1,13 +1,13 @@
-from flask_restful import Resource
 from flask import request
 
+from resources.base import BaseResource
 from schemas.birthday import BirthdaySchema
 from models.birthday import BirthdayModel
 
 birthday_schema = BirthdaySchema()
 
 
-class Birthday(Resource):
+class Birthday(BaseResource):
     @classmethod
     def get(cls, guild_id):
         birthday = BirthdayModel.find_birthday_by_user_id(guild_id, request.args["user_id"]).first()
@@ -21,12 +21,14 @@ class Birthday(Resource):
     def put(cls, guild_id):
         birthday_json = request.get_json()
         birthday_json["guildId"] = guild_id
-        birthday = BirthdayModel.find_birthday_by_user_id(guild_id, birthday_json["userId"]).first()
+        birthday_query = BirthdayModel.find_birthday_by_user_id(guild_id, birthday_json["userId"])
+        birthday = birthday_query.first()
 
         if birthday:
-            return birthday_schema.dump(birthday), 200
+            birthday_query.update(cls.t_dict(birthday_json))
+        else:
+            birthday = birthday_schema.load(birthday_json)
 
-        birthday = birthday_schema.load(birthday_json)
         birthday.save_to_db()
 
         return {"data": birthday_schema.dump(birthday)}, 200
@@ -43,7 +45,7 @@ class Birthday(Resource):
         return {"message": "Item deleted"}, 200
 
 
-class BirthdayList(Resource):
+class BirthdayList(BaseResource):
     @classmethod
     def get(cls, guild_id):
         if "date" in request.args:
