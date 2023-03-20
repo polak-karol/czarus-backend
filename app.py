@@ -12,7 +12,7 @@ from blocklist import BLOCKLIST
 from resources.drawer import Drawer
 from resources.holiday import Holiday
 from resources.birthday import Birthday, BirthdayList
-from resources.answer import Answer
+from resources.answer import Answer, AnswerList
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -40,6 +40,7 @@ api.add_resource(Holiday, "/holiday/<string:guild_id>")
 api.add_resource(Birthday, "/birthday/<string:guild_id>")
 api.add_resource(BirthdayList, "/birthday/list/<string:guild_id>")
 api.add_resource(Answer, "/answer/<string:guild_id>")
+api.add_resource(AnswerList, "/answer/list/<string:guild_id>")
 
 
 if __name__ == "__main__":

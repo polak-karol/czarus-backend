@@ -15,7 +15,7 @@ class Answer(Resource):
         if not answer:
             return {"message": "Not found"}, 404
 
-        return {"message": answer_schema.dump(answer)}, 200
+        return {"data": answer_schema.dump(answer)}, 200
 
     @classmethod
     def put(cls, guild_id):
@@ -30,7 +30,15 @@ class Answer(Resource):
 
         answer.save_to_db()
 
-        return {"message": answer_schema.dump(answer)}, 200
+        return {"data": answer_schema.dump(answer)}, 200
 
 
+class AnswerList(Resource):
+    @classmethod
+    def get(cls, guild_id):
+        answer = AnswerModel.find_answer(guild_id).first()
 
+        if not answer:
+            return {"message": "Not found"}, 404
+
+        return {"data": answer_schema.dump(answer)}, 200
