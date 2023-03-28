@@ -16,7 +16,7 @@ class Holiday(BaseResource):
         if not holiday:
             return {"message": "Not found"}, 404
 
-        return {"message": holiday_schema.dump(holiday)}, 200
+        return {"data": holiday_schema.dump(holiday)}, 200
 
     @classmethod
     def put(cls, guild_id):
