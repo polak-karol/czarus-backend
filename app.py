@@ -10,7 +10,7 @@ from db import db
 from ma import ma
 from blocklist import BLOCKLIST
 from resources.drawer import Drawer
-from resources.holiday import Holiday
+from resources.holiday import Holiday, HolidayList
 from resources.birthday import Birthday, BirthdayList
 from resources.answer import Answer, AnswerList
 
@@ -37,6 +37,7 @@ def check_if_token_in_blocklist(jwt_header, jwt_payload):
 
 api.add_resource(Drawer, "/drawer/<string:guild_id>")
 api.add_resource(Holiday, "/holiday/<string:guild_id>")
+api.add_resource(HolidayList, "/holiday/list/<string:guild_id>")
 api.add_resource(Birthday, "/birthday/<string:guild_id>")
 api.add_resource(BirthdayList, "/birthday/list/<string:guild_id>")
 api.add_resource(Answer, "/answer/<string:guild_id>")

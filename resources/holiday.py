@@ -1,13 +1,13 @@
-from flask_restful import Resource
 from flask import request
 
+from resources.base import BaseResource
 from schemas.holiday import HolidaySchema
 from models.holiday import HolidayModel
 
 holiday_schema = HolidaySchema()
 
 
-class Holiday(Resource):
+class Holiday(BaseResource):
     @classmethod
     def get(cls, guild_id):
         holiday = HolidayModel.find_holiday(guild_id, request.args["date"]).first()
@@ -20,12 +20,26 @@ class Holiday(Resource):
     @classmethod
     def put(cls, guild_id):
         holiday_json = request.get_json()
-        holiday = HolidayModel.find_holiday(guild_id, holiday_json["date"]).first()
+        holiday_json["guildId"] = guild_id
+        holiday_query = HolidayModel.find_holiday(guild_id, holiday_json["date"])
+        holiday = holiday_query.first()
 
         if holiday:
-            return holiday_schema.dump(holiday), 200
+            holiday_query.update(cls.t_dict(holiday_json))
+        else:
+            holiday = holiday_schema.load(holiday_json)
 
-        holiday = holiday_schema.load(holiday_json)
         holiday.save_to_db()
 
         return holiday_schema.dump(holiday), 200
+
+
+class HolidayList(BaseResource):
+    @classmethod
+    def get(cls, guild_id):
+        holidays = HolidayModel.find_holidays_in_range(guild_id, request.args)
+
+        if not holidays:
+            return {"message": "Not found"}, 404
+
+        return {"data": holiday_schema.dump(holidays, many=True)}, 200
