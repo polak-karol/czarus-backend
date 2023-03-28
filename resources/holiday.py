@@ -1,4 +1,5 @@
 from flask import request
+from datetime import datetime
 
 from resources.base import BaseResource
 from schemas.holiday import HolidaySchema
@@ -21,6 +22,7 @@ class Holiday(BaseResource):
     def put(cls, guild_id):
         holiday_json = request.get_json()
         holiday_json["guildId"] = guild_id
+        holiday_json["date"] = datetime.fromisoformat(holiday_json["date"]).strftime('%Y-%m-%d')
         holiday_query = HolidayModel.find_holiday(guild_id, holiday_json["date"])
         holiday = holiday_query.first()
 
@@ -31,7 +33,7 @@ class Holiday(BaseResource):
 
         holiday.save_to_db()
 
-        return holiday_schema.dump(holiday), 200
+        return {"data": holiday_schema.dump(holiday)}, 200
 
 
 class HolidayList(BaseResource):
