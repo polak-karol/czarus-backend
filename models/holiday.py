@@ -1,3 +1,6 @@
+from sqlalchemy import text
+from datetime import date
+
 from db import db
 from models.base import BaseModel
 
@@ -16,4 +19,7 @@ class HolidayModel(BaseModel):
 
     @classmethod
     def find_holidays_in_range(cls, guild_id: str, dates):
-        return cls.query.filter(cls.guild_id == guild_id, cls.date.between(dates["startDate"], dates["endDate"]))
+        start_date = date.fromisoformat(dates["startDate"])
+        end_date = date.fromisoformat(dates["endDate"])
+        return cls.query.from_statement(text(f"""SELECT * FROM holidays WHERE date BETWEEN make_date(EXTRACT(year FROM date)::INTEGER, {start_date.month}, {start_date.day}) AND make_date(EXTRACT(year FROM date)::INTEGER, {end_date.month}, {start_date.day}) AND guild_id = {guild_id};""")).all()
+
