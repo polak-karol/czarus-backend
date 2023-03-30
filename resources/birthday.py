@@ -10,7 +10,9 @@ birthday_schema = BirthdaySchema()
 class Birthday(BaseResource):
     @classmethod
     def get(cls, guild_id):
-        birthday = BirthdayModel.find_birthday_by_user_id(guild_id, request.args["user_id"]).first()
+        birthday = BirthdayModel.find_birthday_by_user_id(
+            guild_id, request.args["user_id"]
+        ).first()
 
         if not birthday:
             return {"message": "Not found"}, 404
@@ -21,7 +23,9 @@ class Birthday(BaseResource):
     def put(cls, guild_id):
         birthday_json = request.get_json()
         birthday_json["guildId"] = guild_id
-        birthday_query = BirthdayModel.find_birthday_by_user_id(guild_id, birthday_json["userId"])
+        birthday_query = BirthdayModel.find_birthday_by_user_id(
+            guild_id, birthday_json["userId"]
+        )
         birthday = birthday_query.first()
 
         if birthday:
@@ -35,7 +39,9 @@ class Birthday(BaseResource):
 
     @classmethod
     def delete(cls, guild_id):
-        birthday = BirthdayModel.find_birthday_by_user_id(guild_id, request.args["user_id"]).first()
+        birthday = BirthdayModel.find_birthday_by_user_id(
+            guild_id, request.args["user_id"]
+        ).first()
 
         if not birthday:
             return {"message": "Item not found"}, 404
@@ -49,7 +55,9 @@ class BirthdayList(BaseResource):
     @classmethod
     def get(cls, guild_id):
         if "date" in request.args:
-            birthdays = BirthdayModel.find_birthday_by_date(guild_id, request.args["date"])
+            birthdays = BirthdayModel.find_birthday_by_date(
+                guild_id, request.args["date"]
+            )
         else:
             birthdays = BirthdayModel.find_birthday_by_guild_id(guild_id)
 

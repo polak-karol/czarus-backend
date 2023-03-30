@@ -5,7 +5,9 @@ class DateTimeHelper:
     current_date = datetime.datetime.today()
 
     @classmethod
-    def get_closest_date_of_weekday(cls, date: datetime.datetime, day: int) -> datetime.datetime:
+    def get_closest_date_of_weekday(
+        cls, date: datetime.datetime, day: int
+    ) -> datetime.datetime:
         """
         Returns the closest day of provided weekday.
         0 - Monday

@@ -21,5 +21,18 @@ class HolidayModel(BaseModel):
     def find_holidays_in_range(cls, guild_id: str, dates):
         start_date = date.fromisoformat(dates["startDate"])
         end_date = date.fromisoformat(dates["endDate"])
-        return cls.query.from_statement(text(f"""SELECT * FROM holidays WHERE date BETWEEN make_date(EXTRACT(year FROM date)::INTEGER, {start_date.month}, {start_date.day}) AND make_date(EXTRACT(year FROM date)::INTEGER, {end_date.month}, {start_date.day}) AND guild_id = {guild_id};""")).all()
+
+        return cls.query.from_statement(text(f"""
+            SELECT 
+                * 
+            FROM 
+                holidays 
+            WHERE 
+                date 
+            BETWEEN 
+                make_date(EXTRACT(year FROM date)::INTEGER, {str(start_date.month)}, {str(start_date.day)}) 
+            AND 
+                make_date(EXTRACT(year FROM date)::INTEGER, {str(end_date.month)}, {str(end_date.day)}) 
+            AND 
+                guild_id = {guild_id};""")).all()
 

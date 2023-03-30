@@ -12,15 +12,11 @@ class BirthdayModel(BaseModel):
     is_anonymous = db.Column(db.Boolean, default=False)
 
     @classmethod
-    def find_birthday_by_guild_id(
-        cls, guild_id: str
-    ) -> "BirthdayModel":
+    def find_birthday_by_guild_id(cls, guild_id: str) -> "BirthdayModel":
         return cls.query.filter_by(guild_id=guild_id)
 
     @classmethod
-    def find_birthday_by_user_id(
-        cls, guild_id: str, user_id: str
-    ) -> "BirthdayModel":
+    def find_birthday_by_user_id(cls, guild_id: str, user_id: str) -> "BirthdayModel":
         return cls.query.filter_by(guild_id=guild_id, user_id=user_id)
 
     @classmethod

@@ -22,7 +22,9 @@ class Holiday(BaseResource):
     def put(cls, guild_id):
         holiday_json = request.get_json()
         holiday_json["guildId"] = guild_id
-        holiday_json["date"] = datetime.fromisoformat(holiday_json["date"]).strftime('%Y-%m-%d')
+        holiday_json["date"] = datetime.fromisoformat(holiday_json["date"]).strftime(
+            "%Y-%m-%d"
+        )
         holiday_query = HolidayModel.find_holiday(guild_id, holiday_json["date"])
         holiday = holiday_query.first()
 

@@ -1,4 +1,3 @@
-
 from models.birthday import BirthdayModel
 from schemas.CamelCaseSchema import CamelCaseSchema
 
