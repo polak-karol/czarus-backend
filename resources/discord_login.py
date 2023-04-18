@@ -8,6 +8,7 @@ from models.user import UserModel
 from schemas.user import UserSchema
 
 user_schema = UserSchema()
+dump_user_schema = UserSchema(only=['id', 'username', 'email', 'avatar', 'locale'])
 
 
 class DiscordLogin(BaseResource):
@@ -55,4 +56,4 @@ class DiscordLogin(BaseResource):
         refresh_token = create_refresh_token(user.id)
         # reg = requests.get('https://discordapp.com/api/users/@me/guilds', headers={'Authorization': 'Bearer
         # xaex05BrSNF3P3A09iwgCQLisxJDhu'}) print(reg.json())
-        return {"access_token": access_token, "refresh_token": refresh_token}, 200
+        return {"data": {"accessToken": access_token, "refreshToken": refresh_token, "user": dump_user_schema.dump(user)}}, 200

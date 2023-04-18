@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
@@ -15,6 +15,7 @@ from resources.birthday import Birthday, BirthdayList
 from resources.answer import Answer, AnswerList
 from resources.draw_config import DrawConfig
 from resources.discord_login import DiscordLogin
+from resources.user import User
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -46,6 +47,7 @@ api.add_resource(Answer, "/answer/<string:guild_id>")
 api.add_resource(AnswerList, "/answer/list/<string:guild_id>")
 api.add_resource(DrawConfig, "/draw-config/<string:guild_id>")
 api.add_resource(DiscordLogin, "/discord-login")
+api.add_resource(User, "/user")
 
 
 if __name__ == "__main__":
