@@ -13,7 +13,8 @@ from resources.drawer import Drawer
 from resources.holiday import Holiday, HolidayList
 from resources.birthday import Birthday, BirthdayList
 from resources.answer import Answer, AnswerList
-from resources.drawConfig import DrawConfig
+from resources.draw_config import DrawConfig
+from resources.discord_login import DiscordLogin
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -44,6 +45,7 @@ api.add_resource(BirthdayList, "/birthday/list/<string:guild_id>")
 api.add_resource(Answer, "/answer/<string:guild_id>")
 api.add_resource(AnswerList, "/answer/list/<string:guild_id>")
 api.add_resource(DrawConfig, "/draw-config/<string:guild_id>")
+api.add_resource(DiscordLogin, "/discord-login")
 
 
 if __name__ == "__main__":

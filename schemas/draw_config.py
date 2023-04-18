@@ -1,5 +1,5 @@
-from schemas.CamelCaseSchema import CamelCaseSchema
-from models.drawConfig import DrawConfigModel
+from schemas.camel_case_schema import CamelCaseSchema
+from models.draw_config import DrawConfigModel
 
 
 class DrawConfigSchema(CamelCaseSchema):

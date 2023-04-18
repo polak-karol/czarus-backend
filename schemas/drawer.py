@@ -1,6 +1,6 @@
 from marshmallow_enum import EnumField
 
-from schemas.CamelCaseSchema import CamelCaseSchema
+from schemas.camel_case_schema import CamelCaseSchema
 from models.drawer import DrawerModel
 from helpers.EnumDrawerType import EnumDrawerType
 
