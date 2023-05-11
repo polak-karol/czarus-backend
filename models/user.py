@@ -21,8 +21,9 @@ class UserModel(BaseModel):
     mfa_enabled = db.Column(db.Boolean)
     premium_type = db.Column(db.Integer)
     avatar_decoration = db.Column(db.String(128))
+    discord_access_token = db.Column(db.String(128))
     verified = db.Column(db.Boolean)
 
     @classmethod
     def find_by_id(cls, user_id: str) -> "UserModel":
-        return cls.query.filter_by(id=user_id).first()
+        return cls.query.filter_by(id=user_id)

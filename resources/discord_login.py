@@ -8,7 +8,9 @@ from models.user import UserModel
 from schemas.user import UserSchema
 
 user_schema = UserSchema()
-dump_user_schema = UserSchema(only=["id", "username", "email", "avatar", "locale"])
+dump_user_schema = UserSchema(
+    only=["id", "username", "email", "avatar", "locale", "discord_access_token"]
+)
 
 
 class DiscordLogin(BaseResource):
@@ -41,9 +43,10 @@ class DiscordLogin(BaseResource):
         response_user = None
 
         if "access_token" in tokens:
+            discord_access_token = tokens["access_token"]
             response_user = requests.get(
                 "https://discordapp.com/api/users/@me",
-                headers={"Authorization": f"Bearer {tokens['access_token']}"},
+                headers={"Authorization": f"Bearer {discord_access_token}"},
             )
 
         if response_user is None:
@@ -54,19 +57,26 @@ class DiscordLogin(BaseResource):
             return error_response
 
         discord_user = response_user.json()
-        user = UserModel.find_by_id(discord_user["id"])
+        discord_user["discord_access_token"] = discord_access_token
+        user_query = UserModel.find_by_id(discord_user["id"])
+        user = user_query.first()
 
-        if not user:
+        if user:
+            user_query.update(cls.t_dict(discord_user))
+        else:
             user = user_schema.load(discord_user, session=db_session)
-            user.save_to_db()
+
+        user.save_to_db()
 
         access_token = create_access_token(identity=user.id, fresh=True)
         refresh_token = create_refresh_token(user.id)
+
         reg = requests.get(
             "https://discordapp.com/api/users/@me/guilds",
             headers={"Authorization": f"Bearer {tokens['access_token']}"},
         )
         guilds = reg.json()
+
         return {
             "data": {
                 "accessToken": access_token,
