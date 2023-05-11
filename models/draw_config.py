@@ -13,5 +13,5 @@ class DrawConfigModel(BaseModel):
     music_config = db.Column(JSONB)
 
     @classmethod
-    def find_draw_config_by_guild_id(cls, guild_id: str) -> 'DrawConfigModel':
+    def find_draw_config_by_guild_id(cls, guild_id: str) -> "DrawConfigModel":
         return cls.query.filter_by(guild_id=guild_id)

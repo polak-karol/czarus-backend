@@ -5,7 +5,7 @@ from models.user import UserModel
 from schemas.user import UserSchema
 
 user_schema = UserSchema()
-dump_user_schema = UserSchema(only=['id', 'username', 'email', 'avatar', 'locale'])
+dump_user_schema = UserSchema(only=["id", "username", "email", "avatar", "locale"])
 
 
 class User(BaseResource):
