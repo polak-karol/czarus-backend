@@ -88,5 +88,5 @@ class DiscordLogin(BaseResource):
         return [
             guild
             for guild in guilds
-            if cls._is_guild_administrator(guild["permissions"])
+            if cls._is_guild_administrator(guild["permissions_new"])
         ]
