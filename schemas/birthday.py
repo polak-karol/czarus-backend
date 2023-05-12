@@ -1,5 +1,5 @@
 from models.birthday import BirthdayModel
-from schemas.CamelCaseSchema import CamelCaseSchema
+from schemas.camel_case_schema import CamelCaseSchema
 
 
 class BirthdaySchema(CamelCaseSchema):

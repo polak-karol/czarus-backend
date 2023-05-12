@@ -1,8 +1,8 @@
 from flask import request
 
 from resources.base import BaseResource
-from schemas.drawConfig import DrawConfigSchema
-from models.drawConfig import DrawConfigModel
+from schemas.draw_config import DrawConfigSchema
+from models.draw_config import DrawConfigModel
 
 draw_config_schema = DrawConfigSchema()
 

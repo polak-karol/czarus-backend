@@ -22,7 +22,9 @@ class HolidayModel(BaseModel):
         start_date = date.fromisoformat(dates["startDate"])
         end_date = date.fromisoformat(dates["endDate"])
 
-        return cls.query.from_statement(text(f"""
+        return cls.query.from_statement(
+            text(
+                f"""
             SELECT 
                 * 
             FROM 
@@ -34,5 +36,6 @@ class HolidayModel(BaseModel):
             AND 
                 make_date(EXTRACT(year FROM date)::INTEGER, {str(end_date.month)}, {str(end_date.day)}) 
             AND 
-                guild_id = {guild_id};""")).all()
-
+                guild_id = {guild_id};"""
+            )
+        ).all()

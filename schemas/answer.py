@@ -1,4 +1,4 @@
-from schemas.CamelCaseSchema import CamelCaseSchema
+from schemas.camel_case_schema import CamelCaseSchema
 from models.answer import AnswerModel
 
 
