@@ -68,21 +68,28 @@ class DiscordLogin(BaseResource):
 
         user.save_to_db()
 
-        access_token = create_access_token(identity=user.id, fresh=True)
+        access_token = create_access_token(identity=user.id, fresh=True, expires_delta=False)
         refresh_token = create_refresh_token(user.id)
 
         reg = requests.get(
             "https://discordapp.com/api/users/@me/guilds",
             headers={"Authorization": f"Bearer {tokens['access_token']}"},
         )
-        guilds = reg.json()
+        guilds_response = reg.json()
+
+        if 'global' in guilds_response:
+            error_response = {
+                "error": request.args["error"],
+                "error_description": request.args["error_description"],
+            }
+            return error_response
 
         return {
             "data": {
                 "accessToken": access_token,
                 "refreshToken": refresh_token,
                 "user": dump_user_schema.dump(user),
-                "guilds": cls._format_guilds_with_administrator_permission(guilds),
+                "guilds": cls._format_guilds_with_administrator_permission(guilds_response),
             }
         }, 200
 
@@ -95,6 +102,9 @@ class DiscordLogin(BaseResource):
 
     @classmethod
     def _format_guilds_with_administrator_permission(cls, guilds):
+        if not guilds:
+            return guilds
+
         return [
             guild
             for guild in guilds
