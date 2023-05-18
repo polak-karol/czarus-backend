@@ -1,5 +1,5 @@
 from flask import request
-from flask_jwt_extended import get_jwt_identity, jwt_required
+from flask_jwt_extended import jwt_required
 
 from resources.base import BaseResource
 from schemas.draw_config import DrawConfigSchema
@@ -12,6 +12,9 @@ class DrawConfig(BaseResource):
     @classmethod
     @jwt_required()
     def get(cls, guild_id):
+        if not cls.is_request_authorized(guild_id):
+            return {"message": "You aren't authorized"}, 401
+
         draw_config = DrawConfigModel.find_draw_config_by_guild_id(guild_id).first()
 
         if not draw_config:
@@ -22,6 +25,9 @@ class DrawConfig(BaseResource):
     @classmethod
     @jwt_required()
     def put(cls, guild_id):
+        if not cls.is_request_authorized(guild_id):
+            return {"message": "You aren't authorized"}, 401
+
         draw_config_json = request.get_json()
         draw_config_json["guildId"] = guild_id
         draw_config_query = DrawConfigModel.find_draw_config_by_guild_id(guild_id)

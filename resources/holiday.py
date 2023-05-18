@@ -1,5 +1,5 @@
 from flask import request
-from flask_jwt_extended import get_jwt_identity, jwt_required
+from flask_jwt_extended import jwt_required
 from datetime import datetime
 
 from resources.base import BaseResource
@@ -13,6 +13,9 @@ class Holiday(BaseResource):
     @classmethod
     @jwt_required()
     def get(cls, guild_id):
+        if not cls.is_request_authorized(guild_id):
+            return {"message": "You aren't authorized"}, 401
+
         holiday = HolidayModel.find_holiday(guild_id, request.args["date"]).first()
 
         if not holiday:
@@ -23,6 +26,9 @@ class Holiday(BaseResource):
     @classmethod
     @jwt_required()
     def put(cls, guild_id):
+        if not cls.is_request_authorized(guild_id):
+            return {"message": "You aren't authorized"}, 401
+
         holiday_json = request.get_json()
         holiday_json["guildId"] = guild_id
         holiday_json["date"] = datetime.fromisoformat(holiday_json["date"]).strftime(
@@ -45,6 +51,9 @@ class HolidayList(BaseResource):
     @classmethod
     @jwt_required()
     def get(cls, guild_id):
+        if not cls.is_request_authorized(guild_id):
+            return {"message": "You aren't authorized"}, 401
+
         holidays = HolidayModel.find_holidays_in_range(guild_id, request.args)
 
         if not holidays:
