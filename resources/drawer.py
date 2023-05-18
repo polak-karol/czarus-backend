@@ -1,5 +1,6 @@
-from flask_restful import Resource
 from flask import request
+from flask_restful import Resource
+from flask_jwt_extended import get_jwt_identity, jwt_required
 
 from helpers.DateTimeHelper import DateTimeHelper
 from schemas.drawer import DrawerSchema
@@ -10,6 +11,7 @@ drawer_schema = DrawerSchema()
 
 class Drawer(Resource):
     @classmethod
+    @jwt_required()
     def put(cls):
         drawer_json = request.get_json()
         drawer = DrawerModel.find_drawer(

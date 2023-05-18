@@ -1,4 +1,5 @@
 from flask import request
+from flask_jwt_extended import get_jwt_identity, jwt_required
 
 from resources.base import BaseResource
 from schemas.birthday import BirthdaySchema
@@ -9,6 +10,7 @@ birthday_schema = BirthdaySchema()
 
 class Birthday(BaseResource):
     @classmethod
+    @jwt_required()
     def get(cls, guild_id):
         birthday = BirthdayModel.find_birthday_by_user_id(
             guild_id, request.args["user_id"]
@@ -20,6 +22,7 @@ class Birthday(BaseResource):
         return {"data": birthday_schema.dump(birthday)}, 200
 
     @classmethod
+    @jwt_required()
     def put(cls, guild_id):
         birthday_json = request.get_json()
         birthday_json["guildId"] = guild_id
@@ -38,6 +41,7 @@ class Birthday(BaseResource):
         return {"data": birthday_schema.dump(birthday)}, 200
 
     @classmethod
+    @jwt_required()
     def delete(cls, guild_id):
         birthday = BirthdayModel.find_birthday_by_user_id(
             guild_id, request.args["user_id"]
@@ -53,6 +57,7 @@ class Birthday(BaseResource):
 
 class BirthdayList(BaseResource):
     @classmethod
+    @jwt_required()
     def get(cls, guild_id):
         if "date" in request.args:
             birthdays = BirthdayModel.find_birthday_by_date(

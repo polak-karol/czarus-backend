@@ -1,4 +1,5 @@
 from flask import request
+from flask_jwt_extended import get_jwt_identity, jwt_required
 from datetime import datetime
 
 from resources.base import BaseResource
@@ -10,6 +11,7 @@ holiday_schema = HolidaySchema()
 
 class Holiday(BaseResource):
     @classmethod
+    @jwt_required()
     def get(cls, guild_id):
         holiday = HolidayModel.find_holiday(guild_id, request.args["date"]).first()
 
@@ -19,6 +21,7 @@ class Holiday(BaseResource):
         return {"data": holiday_schema.dump(holiday)}, 200
 
     @classmethod
+    @jwt_required()
     def put(cls, guild_id):
         holiday_json = request.get_json()
         holiday_json["guildId"] = guild_id
@@ -40,6 +43,7 @@ class Holiday(BaseResource):
 
 class HolidayList(BaseResource):
     @classmethod
+    @jwt_required()
     def get(cls, guild_id):
         holidays = HolidayModel.find_holidays_in_range(guild_id, request.args)
 
