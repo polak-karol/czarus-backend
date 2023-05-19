@@ -1,4 +1,5 @@
 from flask import request
+from flask_jwt_extended import jwt_required
 
 from resources.base import BaseResource
 from schemas.birthday import BirthdaySchema
@@ -9,7 +10,11 @@ birthday_schema = BirthdaySchema()
 
 class Birthday(BaseResource):
     @classmethod
+    @jwt_required()
     def get(cls, guild_id):
+        if not cls.is_request_authorized(guild_id):
+            return {"message": "You aren't authorized"}, 401
+
         birthday = BirthdayModel.find_birthday_by_user_id(
             guild_id, request.args["user_id"]
         ).first()
@@ -20,7 +25,11 @@ class Birthday(BaseResource):
         return {"data": birthday_schema.dump(birthday)}, 200
 
     @classmethod
+    @jwt_required()
     def put(cls, guild_id):
+        if not cls.is_request_authorized(guild_id):
+            return {"message": "You aren't authorized"}, 401
+
         birthday_json = request.get_json()
         birthday_json["guildId"] = guild_id
         birthday_query = BirthdayModel.find_birthday_by_user_id(
@@ -38,7 +47,11 @@ class Birthday(BaseResource):
         return {"data": birthday_schema.dump(birthday)}, 200
 
     @classmethod
+    @jwt_required()
     def delete(cls, guild_id):
+        if not cls.is_request_authorized(guild_id):
+            return {"message": "You aren't authorized"}, 401
+
         birthday = BirthdayModel.find_birthday_by_user_id(
             guild_id, request.args["user_id"]
         ).first()
@@ -53,7 +66,11 @@ class Birthday(BaseResource):
 
 class BirthdayList(BaseResource):
     @classmethod
+    @jwt_required()
     def get(cls, guild_id):
+        if not cls.is_request_authorized(guild_id):
+            return {"message": "You aren't authorized"}, 401
+
         if "date" in request.args:
             birthdays = BirthdayModel.find_birthday_by_date(
                 guild_id, request.args["date"]

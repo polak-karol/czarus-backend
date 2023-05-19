@@ -1,5 +1,6 @@
 from db import db
 from models.base import BaseModel
+from sqlalchemy.dialects.postgresql import ARRAY
 
 
 class UserModel(BaseModel):
@@ -23,6 +24,7 @@ class UserModel(BaseModel):
     avatar_decoration = db.Column(db.String(128))
     discord_access_token = db.Column(db.String(128))
     verified = db.Column(db.Boolean)
+    guild_ids = db.Column(ARRAY(db.String))
 
     @classmethod
     def find_by_id(cls, user_id: str) -> "UserModel":
