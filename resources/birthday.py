@@ -13,14 +13,14 @@ class Birthday(BaseResource):
     @jwt_required()
     def get(cls, guild_id):
         if not cls.is_request_authorized(guild_id):
-            return {"message": "You aren't authorized"}, 401
+            return {"msg": "You aren't authorized"}, 401
 
         birthday = BirthdayModel.find_birthday_by_user_id(
             guild_id, request.args["user_id"]
         ).first()
 
         if not birthday:
-            return {"message": "Not found"}, 404
+            return {"msg": "Not found"}, 404
 
         return {"data": birthday_schema.dump(birthday)}, 200
 
@@ -28,7 +28,7 @@ class Birthday(BaseResource):
     @jwt_required()
     def put(cls, guild_id):
         if not cls.is_request_authorized(guild_id):
-            return {"message": "You aren't authorized"}, 401
+            return {"msg": "You aren't authorized"}, 401
 
         birthday_json = request.get_json()
         birthday_json["guildId"] = guild_id
@@ -50,18 +50,18 @@ class Birthday(BaseResource):
     @jwt_required()
     def delete(cls, guild_id):
         if not cls.is_request_authorized(guild_id):
-            return {"message": "You aren't authorized"}, 401
+            return {"msg": "You aren't authorized"}, 401
 
         birthday = BirthdayModel.find_birthday_by_user_id(
             guild_id, request.args["user_id"]
         ).first()
 
         if not birthday:
-            return {"message": "Item not found"}, 404
+            return {"msg": "Item not found"}, 404
 
         birthday.delete_from_db()
 
-        return {"message": "Item deleted"}, 200
+        return {"msg": "Item deleted"}, 200
 
 
 class BirthdayList(BaseResource):
@@ -69,7 +69,7 @@ class BirthdayList(BaseResource):
     @jwt_required()
     def get(cls, guild_id):
         if not cls.is_request_authorized(guild_id):
-            return {"message": "You aren't authorized"}, 401
+            return {"msg": "You aren't authorized"}, 401
 
         if "date" in request.args:
             birthdays = BirthdayModel.find_birthday_by_date(
@@ -79,6 +79,6 @@ class BirthdayList(BaseResource):
             birthdays = BirthdayModel.find_birthday_by_guild_id(guild_id)
 
         if not birthdays:
-            return {"message": "Not found"}, 404
+            return {"msg": "Not found"}, 404
 
         return {"data": birthday_schema.dump(birthdays, many=True)}, 200

@@ -14,7 +14,7 @@ class Drawer(Resource):
     @jwt_required()
     def put(cls):
         if not cls.is_request_authorized(guild_id):
-            return {"message": "You aren't authorized"}, 401
+            return {"msg": "You aren't authorized"}, 401
 
         drawer_json = request.get_json()
         drawer = DrawerModel.find_drawer(
@@ -24,7 +24,7 @@ class Drawer(Resource):
         if drawer:
             if DateTimeHelper.is_date_in_current_week(drawer.updated_at):
                 return {
-                    "message": "User already draw in this week.",
+                    "msg": "User already draw in this week.",
                     "last_vote_date": drawer.updated_at.isoformat(),
                 }, 400
         else:

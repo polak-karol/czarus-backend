@@ -13,12 +13,12 @@ class Answer(BaseResource):
     @jwt_required()
     def get(cls, guild_id):
         if not cls.is_request_authorized(guild_id):
-            return {"message": "You aren't authorized"}, 401
+            return {"msg": "You aren't authorized"}, 401
 
         answer = AnswerModel.find_answer(guild_id).first()
 
         if not answer:
-            return {"message": "Not found"}, 404
+            return {"msg": "Not found"}, 404
 
         return {"data": answer_schema.dump(answer)}, 200
 
@@ -26,7 +26,7 @@ class Answer(BaseResource):
     @jwt_required()
     def put(cls, guild_id):
         if not cls.is_request_authorized(guild_id):
-            return {"message": "You aren't authorized"}, 401
+            return {"msg": "You aren't authorized"}, 401
 
         answer_json = request.get_json()
         answer_query = AnswerModel.find_answer(guild_id)
@@ -47,11 +47,11 @@ class AnswerList(BaseResource):
     @jwt_required()
     def get(cls, guild_id):
         if not cls.is_request_authorized(guild_id):
-            return {"message": "You aren't authorized"}, 401
+            return {"msg": "You aren't authorized"}, 401
 
         answer = AnswerModel.find_answer(guild_id).first()
 
         if not answer:
-            return {"message": "Not found"}, 404
+            return {"msg": "Not found"}, 404
 
         return {"data": answer_schema.dump(answer)}, 200
