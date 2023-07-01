@@ -12,7 +12,7 @@ drawer_schema = DrawerSchema()
 class Drawer(Resource):
     @classmethod
     @jwt_required(optional=True)
-    def put(cls)
+    def put(cls):
         if not cls.is_client_authorized():
             return cls.not_authorized_response
 
