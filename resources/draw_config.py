@@ -18,7 +18,7 @@ class DrawConfig(BaseResource):
         draw_config = DrawConfigModel.find_draw_config_by_guild_id(guild_id).first()
 
         if not draw_config:
-            return {"message": "Not found"}, 404
+            return {"msg": "Not found"}, 404
 
         return {"data": draw_config_schema.dump(draw_config)}, 200
 

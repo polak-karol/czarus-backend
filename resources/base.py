@@ -25,4 +25,3 @@ class BaseResource(Resource):
     def is_client_authorized(cls):
         return get_jwt_identity() or request.headers.get('Bot-Authorization') == os.getenv("BOT_AUTHORIZATION_TOKEN")
 
-

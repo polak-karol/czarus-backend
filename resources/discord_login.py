@@ -57,21 +57,6 @@ class DiscordLogin(BaseResource):
             }
             return error_response
 
-        discord_user = response_user.json()
-        discord_user["discord_access_token"] = discord_access_token
-        user_query = UserModel.find_by_id(discord_user["id"])
-        user = user_query.first()
-
-        if user:
-            user_query.update(cls.t_dict(discord_user))
-        else:
-            user = user_schema.load(discord_user, session=db_session)
-
-        user.save_to_db()
-
-        access_token = create_access_token(identity=user.id, fresh=True, expires_delta=False)
-        refresh_token = create_refresh_token(user.id)
-
         reg = requests.get(
             "https://discordapp.com/api/users/@me/guilds",
             headers={"Authorization": f"Bearer {tokens['access_token']}"},
@@ -85,12 +70,30 @@ class DiscordLogin(BaseResource):
             }
             return error_response
 
+        guilds_with_admin_permission = cls._format_guilds_with_administrator_permission(guilds_response)
+
+        discord_user = response_user.json()
+        discord_user["discord_access_token"] = discord_access_token
+        discord_user["guild_ids"] = [guild["id"] for guild in guilds_with_admin_permission]
+        user_query = UserModel.find_by_id(discord_user["id"])
+        user = user_query.first()
+
+        if user:
+            user_query.update(cls.t_dict(discord_user))
+        else:
+            user = user_schema.load(discord_user, session=db_session)
+
+        user.save_to_db()
+
+        access_token = create_access_token(identity=user.id, fresh=True, expires_delta=False)
+        refresh_token = create_refresh_token(user.id)
+
         return {
             "data": {
                 "accessToken": access_token,
                 "refreshToken": refresh_token,
                 "user": dump_user_schema.dump(user),
-                "guilds": cls._format_guilds_with_administrator_permission(guilds_response),
+                "guilds": guilds_with_admin_permission,
             }
         }, 200
 

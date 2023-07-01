@@ -18,7 +18,7 @@ class Answer(BaseResource):
         answer = AnswerModel.find_answer(guild_id).first()
 
         if not answer:
-            return {"message": "Not found"}, 404
+            return {"msg": "Not found"}, 404
 
         return {"data": answer_schema.dump(answer)}, 200
 
@@ -52,6 +52,6 @@ class AnswerList(BaseResource):
         answer = AnswerModel.find_answer(guild_id).first()
 
         if not answer:
-            return {"message": "Not found"}, 404
+            return {"msg": "Not found"}, 404
 
         return {"data": answer_schema.dump(answer)}, 200

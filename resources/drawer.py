@@ -1,5 +1,5 @@
-from flask_restful import Resource
 from flask import request
+from flask_restful import Resource
 from flask_jwt_extended import jwt_required
 
 from helpers.DateTimeHelper import DateTimeHelper
@@ -24,7 +24,7 @@ class Drawer(Resource):
         if drawer:
             if DateTimeHelper.is_date_in_current_week(drawer.updated_at):
                 return {
-                    "message": "User already draw in this week.",
+                    "msg": "User already draw in this week.",
                     "last_vote_date": drawer.updated_at.isoformat(),
                 }, 400
         else:

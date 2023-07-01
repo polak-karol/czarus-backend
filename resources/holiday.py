@@ -19,7 +19,7 @@ class Holiday(BaseResource):
         holiday = HolidayModel.find_holiday(guild_id, request.args["date"]).first()
 
         if not holiday:
-            return {"message": "Not found"}, 404
+            return {"msg": "Not found"}, 404
 
         return {"data": holiday_schema.dump(holiday)}, 200
 
@@ -57,6 +57,6 @@ class HolidayList(BaseResource):
         holidays = HolidayModel.find_holidays_in_range(guild_id, request.args)
 
         if not holidays:
-            return {"message": "Not found"}, 404
+            return {"msg": "Not found"}, 404
 
         return {"data": holiday_schema.dump(holidays, many=True)}, 200
