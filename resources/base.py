@@ -1,4 +1,5 @@
 import re
+import os
 from flask_restful import Resource
 from flask import request
 from flask_jwt_extended import get_jwt_identity
@@ -22,6 +23,6 @@ class BaseResource(Resource):
 
     @classmethod
     def is_client_authorized(cls):
-        return get_jwt_identity() or request.headers.get('Bot-Authorization') == 'Token'
+        return get_jwt_identity() or request.headers.get('Bot-Authorization') == os.getenv("BOT_AUTHORIZATION_TOKEN")
 
 

@@ -1,5 +1,6 @@
 from flask import request
 import requests
+import os
 from flask_jwt_extended import create_refresh_token, create_access_token
 
 from db import db_session
@@ -20,8 +21,8 @@ class DiscordLogin(BaseResource):
     def post(cls):
         user_json = request.get_json()
         data = {
-            "client_id": 993578103538458664,
-            "client_secret": "6erHxpCwT3pJQNpwz1oVNbELUxY7By1g",
+            "client_id": os.getenv("DISCORD_APP_CLIENT_ID"),
+            "client_secret": os.getenv("DISCORD_APP_SECRET_TOKEN"),
             "grant_type": "authorization_code",
             "code": user_json["code"],
             "redirect_uri": "http://localhost:5173/authorize",
