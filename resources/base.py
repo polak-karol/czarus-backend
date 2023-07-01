@@ -22,6 +22,6 @@ class BaseResource(Resource):
 
     @classmethod
     def is_client_authorized(cls):
-        return not get_jwt_identity() or request.headers.get('Bot-Authorization') != 'Token'
+        return get_jwt_identity() or request.headers.get('Bot-Authorization') == 'Token'
 
 
