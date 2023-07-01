@@ -21,7 +21,7 @@ class DiscordLogin(BaseResource):
         user_json = request.get_json()
         data = {
             "client_id": 993578103538458664,
-            "client_secret": "-K6CFKP0rnCgp1Wbgt1e6RUxuFQGFzG9",
+            "client_secret": "6erHxpCwT3pJQNpwz1oVNbELUxY7By1g",
             "grant_type": "authorization_code",
             "code": user_json["code"],
             "redirect_uri": "http://localhost:5173/authorize",
