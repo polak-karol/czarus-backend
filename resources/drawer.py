@@ -11,10 +11,10 @@ drawer_schema = DrawerSchema()
 
 class Drawer(Resource):
     @classmethod
-    @jwt_required()
+    @jwt_required(optional=True)
     def put(cls):
-        if not cls.is_request_authorized(guild_id):
-            return {"msg": "You aren't authorized"}, 401
+        if not cls.is_client_authorized():
+            return cls.not_authorized_response
 
         drawer_json = request.get_json()
         drawer = DrawerModel.find_drawer(

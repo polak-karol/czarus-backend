@@ -10,10 +10,10 @@ answer_schema = AnswerSchema()
 
 class Answer(BaseResource):
     @classmethod
-    @jwt_required()
+    @jwt_required(optional=True)
     def get(cls, guild_id):
-        if not cls.is_request_authorized(guild_id):
-            return {"msg": "You aren't authorized"}, 401
+        if not cls.is_client_authorized():
+            return cls.not_authorized_response
 
         answer = AnswerModel.find_answer(guild_id).first()
 
@@ -23,10 +23,10 @@ class Answer(BaseResource):
         return {"data": answer_schema.dump(answer)}, 200
 
     @classmethod
-    @jwt_required()
+    @jwt_required(optional=True)
     def put(cls, guild_id):
-        if not cls.is_request_authorized(guild_id):
-            return {"msg": "You aren't authorized"}, 401
+        if not cls.is_client_authorized():
+            return cls.not_authorized_response
 
         answer_json = request.get_json()
         answer_query = AnswerModel.find_answer(guild_id)
@@ -44,10 +44,10 @@ class Answer(BaseResource):
 
 class AnswerList(BaseResource):
     @classmethod
-    @jwt_required()
+    @jwt_required(optional=True)
     def get(cls, guild_id):
-        if not cls.is_request_authorized(guild_id):
-            return {"msg": "You aren't authorized"}, 401
+        if not cls.is_client_authorized():
+            return cls.not_authorized_response
 
         answer = AnswerModel.find_answer(guild_id).first()
 
