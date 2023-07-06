@@ -17,9 +17,13 @@ class GuildSettings(BaseResource):
 
         guild_settings_json = request.get_json()
         guild_settings_json["guild_id"] = guild_id
-        guild_settings = GuildSettingsModel.find_guild_settings(guild_id).first()
+        guild_settings_query = GuildSettingsModel.find_guild_settings(guild_id)
+        guild_settings = guild_settings_query.first()
 
-        guild_settings = guild_settings_schema.load(guild_settings_json)
+        if guild_settings:
+            guild_settings_query.update(cls.t_dict(guild_settings_json))
+        else:
+            guild_settings = guild_settings_schema.load(guild_settings_json)
 
         guild_settings.save_to_db()
 
