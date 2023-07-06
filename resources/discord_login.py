@@ -45,15 +45,10 @@ class DiscordLogin(BaseResource):
 
         if "access_token" in tokens:
             discord_access_token = tokens["access_token"]
-            print(discord_access_token)
             response_user = requests.get(
                 "https://discordapp.com/api/users/@me",
                 headers={"Authorization": f"Bearer {discord_access_token}"},
             )
-            response_channels = requests.get("https://discordapp.com/api/guilds/733001624427036825/channels",
-                                             headers={"Authorization": f"Bearer {discord_access_token}"}
-                                             )
-            print(response_channels.json())
 
         if response_user is None:
             error_response = {
