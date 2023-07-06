@@ -13,4 +13,4 @@ class GuildSettingsModel(BaseModel):
 
     @classmethod
     def find_guild_settings(cls, guild_id):
-        return cls.query.filter_by(guild_id)
+        return cls.query.filter_by(guild_id=guild_id)
