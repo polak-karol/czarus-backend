@@ -18,6 +18,7 @@ from resources.draw_config import DrawConfig
 from resources.discord_login import DiscordLogin
 from resources.user import User
 from resources.client_authorization import  ClientAuthorization
+from resources.discord import DiscordGuildChannels
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -65,6 +66,7 @@ api.add_resource(DrawConfig, "/draw-config/<string:guild_id>")
 api.add_resource(DiscordLogin, "/discord-login")
 api.add_resource(User, "/user")
 api.add_resource(ClientAuthorization, "/client-authorization")
+api.add_resource(DiscordGuildChannels, "/guild-channels/<string:guild_id>")
 
 
 if __name__ == "__main__":
