@@ -1,10 +1,11 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_restful import Api
-from flask_jwt_extended import JWTManager
+from flask_jwt_extended import JWTManager, get_jwt, create_access_token, get_jwt_identity, set_access_cookies
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 from marshmallow import ValidationError
+from datetime import datetime, timezone, timedelta
 
 from db import db
 from ma import ma
@@ -28,6 +29,20 @@ api = Api(app)
 jwt = JWTManager(app)
 db.init_app(app)
 migrate = Migrate(app, db)
+
+
+@app.after_request
+def refresh_expiring_jwts(response):
+    try:
+        exp_timestamp = get_jwt()["exp"]
+        now = datetime.now(timezone.utc)
+        target_timestamp = datetime.timestamp(now + timedelta(days=30))
+        if target_timestamp > exp_timestamp:
+            access_token = create_access_token(identity=get_jwt_identity())
+            set_access_cookies(response, access_token)
+        return response
+    except (RuntimeError, KeyError):
+        return response
 
 
 @app.errorhandler(ValidationError)

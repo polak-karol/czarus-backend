@@ -10,10 +10,10 @@ draw_config_schema = DrawConfigSchema()
 
 class DrawConfig(BaseResource):
     @classmethod
-    @jwt_required()
+    @jwt_required(optional=True)
     def get(cls, guild_id):
-        if not cls.is_request_authorized(guild_id):
-            return {"msg": "You aren't authorized"}, 401
+        if not cls.is_client_authorized():
+            return cls.not_authorized_response
 
         draw_config = DrawConfigModel.find_draw_config_by_guild_id(guild_id).first()
 
@@ -23,10 +23,10 @@ class DrawConfig(BaseResource):
         return {"data": draw_config_schema.dump(draw_config)}, 200
 
     @classmethod
-    @jwt_required()
+    @jwt_required(optional=True)
     def put(cls, guild_id):
-        if not cls.is_request_authorized(guild_id):
-            return {"msg": "You aren't authorized"}, 401
+        if not cls.is_client_authorized():
+            return cls.not_authorized_response
 
         draw_config_json = request.get_json()
         draw_config_json["guildId"] = guild_id

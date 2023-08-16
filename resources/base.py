@@ -1,11 +1,13 @@
 import re
+import os
 from flask_restful import Resource
+from flask import request
 from flask_jwt_extended import get_jwt_identity
-
-from models.user import UserModel
 
 
 class BaseResource(Resource):
+    not_authorized_response = {'message': 'You are not authorized'}, 401
+
     @classmethod
     def to_snake(cls, string):
         return re.sub("([A-Z]\w+$)", "_\\1", string).lower()
@@ -20,6 +22,6 @@ class BaseResource(Resource):
         }
 
     @classmethod
-    def is_request_authorized(cls, guild_id):
-        user = UserModel.find_by_id(get_jwt_identity()).first()
-        return guild_id in user.guild_ids
+    def is_client_authorized(cls):
+        return get_jwt_identity() or request.headers.get('Bot-Authorization') == os.getenv("BOT_AUTHORIZATION_TOKEN")
+
