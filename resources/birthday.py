@@ -11,7 +11,7 @@ birthday_schema = BirthdaySchema()
 class Birthday(BaseResource):
     @classmethod
     @jwt_required(optional=True)
-    def get(cls, guild_id):
+    def get(cls, guild_id: str):
         if not cls.is_client_authorized():
             return cls.not_authorized_response
 
@@ -26,7 +26,7 @@ class Birthday(BaseResource):
 
     @classmethod
     @jwt_required(optional=True)
-    def put(cls, guild_id):
+    def put(cls, guild_id: str):
         if not cls.is_client_authorized():
             return cls.not_authorized_response
 
@@ -48,7 +48,7 @@ class Birthday(BaseResource):
 
     @classmethod
     @jwt_required(optional=True)
-    def delete(cls, guild_id):
+    def delete(cls, guild_id: str):
         if not cls.is_client_authorized():
             return cls.not_authorized_response
 
@@ -67,7 +67,7 @@ class Birthday(BaseResource):
 class BirthdayList(BaseResource):
     @classmethod
     @jwt_required(optional=True)
-    def get(cls, guild_id):
+    def get(cls, guild_id: str):
         if not cls.is_client_authorized():
             return cls.not_authorized_response
 
