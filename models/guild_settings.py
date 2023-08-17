@@ -9,6 +9,7 @@ class GuildSettingsModel(BaseModel):
     birthdays_channel_id = db.Column(db.String(300), nullable=True)
     answers_channel_id = db.Column(db.String(300), nullable=True)
     holiday_channel_id = db.Column(db.String(300), nullable=True)
+    draw_challenges_channel_id = db.Column(db.String(300), nullable=True)
     guild_id = db.Column(db.String(300), nullable=False, unique=True)
 
     @classmethod
