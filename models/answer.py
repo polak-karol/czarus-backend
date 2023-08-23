@@ -17,7 +17,6 @@ class AnswerModel(BaseModel):
     what_answers = db.Column(postgresql.ARRAY(db.String))
     what_is_answers = db.Column(postgresql.ARRAY(db.String))
     guild_id = db.Column(db.String(300), nullable=False)
-    channel_id = db.Column(db.String(300), nullable=False)
 
     @classmethod
     def find_answer(cls, guild_id: str) -> "AnswerModel":

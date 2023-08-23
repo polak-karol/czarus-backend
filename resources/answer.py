@@ -29,6 +29,7 @@ class Answer(BaseResource):
             return cls.not_authorized_response
 
         answer_json = request.get_json()
+        answer_json["guildId"] = guild_id
         answer_query = AnswerModel.find_answer(guild_id)
         answer = answer_query.first()
 
