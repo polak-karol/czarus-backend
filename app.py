@@ -1,7 +1,13 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_restful import Api
-from flask_jwt_extended import JWTManager, get_jwt, create_access_token, get_jwt_identity, set_access_cookies
+from flask_jwt_extended import (
+    JWTManager,
+    get_jwt,
+    create_access_token,
+    get_jwt_identity,
+    set_access_cookies,
+)
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 from marshmallow import ValidationError

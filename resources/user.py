@@ -34,7 +34,7 @@ class User(BaseResource):
         )
         guilds_response = reg.json()
 
-        if 'global' in guilds_response:
+        if "global" in guilds_response:
             error_response = {
                 "error": request.args["error"],
                 "error_description": request.args["error_description"],
@@ -44,7 +44,9 @@ class User(BaseResource):
         return {
             "data": {
                 "user": dump_user_schema.dump(user),
-                "guilds": cls._format_guilds_with_administrator_permission(guilds_response),
+                "guilds": cls._format_guilds_with_administrator_permission(
+                    guilds_response
+                ),
             }
         }, 200
 

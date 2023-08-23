@@ -13,7 +13,9 @@ class GuildChannels(BaseResource):
 
         reg = requests.get(
             f"https://discordapp.com/api/guilds/{guild_id}/channels",
-            headers={"Authorization": f"Bot OTkzNTc4MTAzNTM4NDU4NjY0.GBv2ys.H5NzLB_xlkehm31XI4XsrZHhsCeOPGrrKlGvQQ"},
+            headers={
+                "Authorization": f"Bot OTkzNTc4MTAzNTM4NDU4NjY0.GBv2ys.H5NzLB_xlkehm31XI4XsrZHhsCeOPGrrKlGvQQ"
+            },
         )
         guild_channels = reg.json()
 

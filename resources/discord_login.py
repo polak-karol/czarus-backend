@@ -16,6 +16,27 @@ dump_user_schema = UserSchema(
 
 class DiscordLogin(BaseResource):
     _administrator_permission = 8
+    _user_properties_white_list = [
+        "id",
+        "username",
+        "discriminator",
+        "global_name",
+        "display_name",
+        "avatar",
+        "locale",
+        "public_flags",
+        "email",
+        "flags",
+        "banner",
+        "banner_color",
+        "accent_color",
+        "mfa_enabled",
+        "premium_type",
+        "avatar_decoration",
+        "discord_access_token",
+        "verified",
+        "guild_ids",
+    ]
 
     @classmethod
     def post(cls):
@@ -63,18 +84,27 @@ class DiscordLogin(BaseResource):
         )
         guilds_response = reg.json()
 
-        if 'global' in guilds_response:
+        if "global" in guilds_response:
             error_response = {
                 "error": request.args["error"],
                 "error_description": request.args["error_description"],
             }
             return error_response
 
-        guilds_with_admin_permission = cls._format_guilds_with_administrator_permission(guilds_response)
+        guilds_with_admin_permission = cls._format_guilds_with_administrator_permission(
+            guilds_response
+        )
 
         discord_user = response_user.json()
         discord_user["discord_access_token"] = discord_access_token
-        discord_user["guild_ids"] = [guild["id"] for guild in guilds_with_admin_permission]
+        discord_user["guild_ids"] = [
+            guild["id"] for guild in guilds_with_admin_permission
+        ]
+        discord_user = dict(
+            (key, value)
+            for key, value in discord_user.items()
+            if key in cls._user_properties_white_list
+        )
         user_query = UserModel.find_by_id(discord_user["id"])
         user = user_query.first()
 
@@ -85,7 +115,9 @@ class DiscordLogin(BaseResource):
 
         user.save_to_db()
 
-        access_token = create_access_token(identity=user.id, fresh=True, expires_delta=False)
+        access_token = create_access_token(
+            identity=user.id, fresh=True, expires_delta=False
+        )
         refresh_token = create_refresh_token(user.id)
 
         return {

@@ -6,7 +6,6 @@ from resources.base import BaseResource
 
 
 class DiscordGuildChannels(BaseResource):
-
     @classmethod
     @jwt_required()
     def get(cls, guild_id):
@@ -16,7 +15,7 @@ class DiscordGuildChannels(BaseResource):
         )
         channels = response_channels.json()
 
-        if 'code' in channels:
+        if "code" in channels:
             return {"message": "Can't fetch data"}, 400
 
         return {"data": channels}, 200

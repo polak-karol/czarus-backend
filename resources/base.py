@@ -6,7 +6,7 @@ from flask_jwt_extended import get_jwt_identity
 
 
 class BaseResource(Resource):
-    not_authorized_response = {'message': 'You are not authorized'}, 401
+    not_authorized_response = {"message": "You are not authorized"}, 401
 
     @classmethod
     def to_snake(cls, string):
@@ -23,5 +23,6 @@ class BaseResource(Resource):
 
     @classmethod
     def is_client_authorized(cls):
-        return get_jwt_identity() or request.headers.get('Bot-Authorization') == os.getenv("BOT_AUTHORIZATION_TOKEN")
-
+        return get_jwt_identity() or request.headers.get(
+            "Bot-Authorization"
+        ) == os.getenv("BOT_AUTHORIZATION_TOKEN")
