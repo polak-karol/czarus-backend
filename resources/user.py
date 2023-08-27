@@ -8,7 +8,20 @@ from schemas.user import UserSchema
 
 user_schema = UserSchema()
 dump_user_schema = UserSchema(
-    only=["id", "username", "email", "avatar", "locale", "discord_access_token"]
+    only=[
+        "id",
+        "username",
+        "email",
+        "avatar",
+        "locale",
+        "global_name",
+        "banner",
+        "accent_color",
+        "verified",
+        "flags",
+        "premium_type",
+        "discord_access_token",
+    ]
 )
 
 
