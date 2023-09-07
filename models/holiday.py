@@ -36,6 +36,6 @@ class HolidayModel(BaseModel):
             AND 
                 make_date(EXTRACT(year FROM date)::INTEGER, {str(end_date.month)}, {str(end_date.day)}) 
             AND 
-                guild_id = {guild_id};"""
+                guild_id = {guild_id}::VARCHAR;"""
             )
         ).all()
