@@ -14,15 +14,6 @@ class BaseResource(Resource):
         return re.sub("([A-Z]\w+$)", "_\\1", string).lower()
 
     @classmethod
-    def t_dict(cls, value):
-        if isinstance(value, list):
-            return [cls.t_dict(i) if isinstance(i, (dict, list)) else i for i in value]
-        return {
-            cls.to_snake(a): cls.t_dict(b) if isinstance(b, (dict, list)) else b
-            for a, b in value.items()
-        }
-
-    @classmethod
     def is_client_authorized(cls):
         return get_jwt_identity() or request.headers.get(
             "Bot-Authorization"
@@ -40,9 +31,9 @@ class BaseResource(Resource):
     @classmethod
     def recursive_snake_case(cls, data):
         if isinstance(data, dict):
-            return {cls.__snake_case(key): cls.__snake_case_keys(value) for key, value in data.items()}
+            return {cls.__snake_case(key): cls.__snake_case(value) for key, value in data.items()}
         elif isinstance(data, list):
-            return [cls.__snake_case_keys(item) for item in data]
+            return [cls.__snake_case(item) for item in data]
         else:
             return data
 

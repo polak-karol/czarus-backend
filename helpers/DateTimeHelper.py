@@ -2,8 +2,6 @@ import datetime
 
 
 class DateTimeHelper:
-    current_date = datetime.datetime.today()
-
     @classmethod
     def get_closest_date_of_weekday(
         cls, date: datetime.datetime, day: int
@@ -13,7 +11,8 @@ class DateTimeHelper:
         0 - Monday
         6 - Sunday
         """
-        days = (day - date.weekday() + 7) % 7
+        days = -1 * (date.weekday() - day)
+
         return date + datetime.timedelta(days=days)
 
     @classmethod
@@ -21,8 +20,8 @@ class DateTimeHelper:
         """
         Returns boolean if date is in current week.
         """
-        return (
-            cls.get_closest_date_of_weekday(cls.current_date, 6)
-            >= date
-            <= cls.get_closest_date_of_weekday(cls.current_date, 0)
-        )
+        current_date = datetime.datetime.today()
+        last_week_day = cls.get_closest_date_of_weekday(current_date, 6).replace(hour=23, minute=59, second=59)
+        first_week_day = cls.get_closest_date_of_weekday(current_date, 0).replace(hour=0, minute=0, second=0)
+
+        return last_week_day >= date >= first_week_day
