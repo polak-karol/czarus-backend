@@ -57,9 +57,9 @@ class User(BaseResource):
         return {
             "data": {
                 "user": dump_user_schema.dump(user),
-                "guilds": cls._format_guilds_with_administrator_permission(
+                "guilds": cls.recursive_camelize(cls._format_guilds_with_administrator_permission(
                     guilds_response
-                ),
+                )),
             }
         }, 200
 

@@ -1,7 +1,7 @@
 from flask import request
-from flask_restful import Resource
 from flask_jwt_extended import jwt_required
 
+from resources.base import BaseResource
 from helpers.DateTimeHelper import DateTimeHelper
 from schemas.drawer import DrawerSchema
 from models.drawer import DrawerModel
@@ -9,14 +9,31 @@ from models.drawer import DrawerModel
 drawer_schema = DrawerSchema()
 
 
-class Drawer(Resource):
+class Drawer(BaseResource):
     @classmethod
     @jwt_required(optional=True)
-    def put(cls):
+    def get(cls, guild_id):
+        if not cls.is_client_authorized():
+            return cls.not_authorized_response
+
+        drawer = DrawerModel.find_drawer(
+            guild_id, request.args["user_id"], request.args["draw_type"]
+        ).first()
+
+        if drawer:
+            return drawer_schema.dump(drawer), 200
+
+        return {'msg': 'Not found.'}, 404
+
+    @classmethod
+    @jwt_required(optional=True)
+    def put(cls, guild_id):
         if not cls.is_client_authorized():
             return cls.not_authorized_response
 
         drawer_json = request.get_json()
+        drawer_json["guild_id"] = guild_id
+        drawer_json = drawer_schema.load(drawer_json)
         drawer = DrawerModel.find_drawer(
             drawer_json["guild_id"], drawer_json["user_id"], drawer_json["draw_type"]
         ).first()
@@ -25,7 +42,7 @@ class Drawer(Resource):
             if DateTimeHelper.is_date_in_current_week(drawer.updated_at):
                 return {
                     "msg": "User already draw in this week.",
-                    "last_vote_date": drawer.updated_at.isoformat(),
+                    "lastVoteDate": drawer.updated_at.isoformat(),
                 }, 400
         else:
             drawer = drawer_schema.load(drawer_json)

@@ -1,9 +1,8 @@
-from ma import ma
-
+from schemas.camel_case_schema import CamelCaseSchema
 from models.guild_settings import GuildSettingsModel
 
 
-class GuildSettingsSchema(ma.SQLAlchemyAutoSchema):
+class GuildSettingsSchema(CamelCaseSchema):
     class Meta:
         model = GuildSettingsModel
         load_instance = True

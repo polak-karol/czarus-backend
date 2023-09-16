@@ -28,15 +28,15 @@ class Answer(BaseResource):
         if not cls.is_client_authorized():
             return cls.not_authorized_response
 
-        answer_json = request.get_json()
-        answer_json["guildId"] = guild_id
+        answer_json = cls.recursive_snake_case(request.get_json())
+        answer_json["guild_id"] = guild_id
         answer_query = AnswerModel.find_answer(guild_id)
         answer = answer_query.first()
 
         if not answer:
             answer = answer_schema.load(answer_json)
         else:
-            answer_query.update(cls.t_dict(answer_json))
+            answer_query.update(answer_json)
 
         answer.save_to_db()
 

@@ -34,7 +34,7 @@ class DrawConfig(BaseResource):
         draw_config = draw_config_query.first()
 
         if draw_config:
-            draw_config_query.update(cls.t_dict(draw_config_json))
+            draw_config_query.update(draw_config_schema.load(draw_config_json))
         else:
             draw_config = draw_config_schema.load(draw_config_json)
 

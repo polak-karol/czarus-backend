@@ -18,5 +18,4 @@ class GuildChannels(BaseResource):
             },
         )
         guild_channels = reg.json()
-
-        return {"data": guild_channels}, 200
+        return {"data": cls.recursive_camelize(guild_channels)}, 200
