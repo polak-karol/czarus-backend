@@ -33,17 +33,21 @@ class Drawer(BaseResource):
         drawer_json = request.get_json()
         drawer_json["guildId"] = guild_id
         drawer_snake = cls.recursive_snake_case(drawer_json)
-        drawer = DrawerModel.find_drawer(
+        drawer_query = DrawerModel.find_drawer(
             drawer_snake["guild_id"], drawer_snake["user_id"], drawer_snake["draw_type"]
-        ).first()
+        )
+        drawer = drawer_query.first()
 
-        if drawer and DateTimeHelper.is_date_in_current_week(drawer.updated_at):
-            return {
-                "msg": "User already draw in this week.",
-                "lastVoteDate": drawer.updated_at.isoformat(),
-            }, 400
+        if drawer:
+            if DateTimeHelper.is_date_in_current_week(drawer.updated_at):
+                return {
+                    "msg": "User already draw in this week.",
+                    "lastVoteDate": drawer.updated_at.isoformat(),
+                }, 400
+            drawer_query.update(drawer_snake)
+        else:
+            drawer = drawer_schema.load(drawer_json)
 
-        drawer = drawer_schema.load(drawer_json)
         drawer.save_to_db()
 
         return drawer_schema.dump(drawer), 200
