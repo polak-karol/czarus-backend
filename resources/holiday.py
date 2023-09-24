@@ -38,7 +38,7 @@ class Holiday(BaseResource):
         holiday = holiday_query.first()
 
         if holiday:
-            holiday_query.update(cls.t_dict(holiday_json))
+            holiday_query.update(holiday_json)
         else:
             holiday = holiday_schema.load(holiday_json)
 

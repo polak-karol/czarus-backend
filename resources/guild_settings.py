@@ -21,9 +21,9 @@ class GuildSettings(BaseResource):
         guild_settings = guild_settings_query.first()
 
         if guild_settings:
-            guild_settings_query.update(cls.t_dict(guild_settings_json))
+            guild_settings_query.update(guild_settings_json)
         else:
-            guild_settings = guild_settings_schema.load(guild_settings_json)
+            guild_settings = guild_settings_schema.load(cls.recursive_camelize(guild_settings_json))
 
         guild_settings.save_to_db()
 
@@ -38,3 +38,16 @@ class GuildSettings(BaseResource):
         guild_settings = GuildSettingsModel.find_guild_settings(guild_id).first()
 
         return {"data": guild_settings_schema.dump(guild_settings)}, 200
+
+
+class GuildSettingsList(BaseResource):
+
+    @classmethod
+    @jwt_required(optional=True)
+    def get(cls):
+        if not cls.is_client_authorized():
+            return cls.not_authorized_response
+
+        guild_settings = GuildSettingsModel.get_all_settings()
+
+        return {"data": guild_settings_schema.dump(guild_settings, many=True)}, 200

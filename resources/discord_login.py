@@ -109,7 +109,7 @@ class DiscordLogin(BaseResource):
         user = user_query.first()
 
         if user:
-            user_query.update(cls.t_dict(discord_user))
+            user_query.update(discord_user)
         else:
             user = user_schema.load(discord_user, session=db_session)
 

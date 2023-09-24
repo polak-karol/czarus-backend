@@ -39,5 +39,8 @@ class BaseResource(Resource):
 
     @classmethod
     def __snake_case(cls, snake_str):
+        if isinstance(snake_str, bool):
+            return snake_str
+
         return ''.join(['_' + i.lower() if i.isupper() else i for i in snake_str]).lstrip('_')
 
