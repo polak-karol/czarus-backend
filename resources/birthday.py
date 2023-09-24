@@ -36,7 +36,6 @@ class Birthday(BaseResource):
             guild_id, birthday_json["userId"]
         )
         birthday = birthday_query.first()
-        print(birthday_json)
 
         if birthday:
             birthday_query.update(cls.recursive_snake_case(birthday_json))
