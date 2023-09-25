@@ -46,13 +46,17 @@ class DiscordLogin(BaseResource):
             "client_secret": os.getenv("DISCORD_APP_SECRET_TOKEN"),
             "grant_type": "authorization_code",
             "code": user_json["code"],
-            "redirect_uri": "http://localhost:5173/authorize",
+            "redirect_uri": os.getenv("REDIRECT_URI"),
             "scope": "identify guilds email",
         }
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
-        response_oauth = requests.post(
-            "https://discord.com/api/oauth2/token", data=data, headers=headers
-        )
+
+        try:
+            response_oauth = requests.post(
+                "https://discord.com/api/oauth2/token", data=data, headers=headers
+            )
+        except:
+            return {"message": "Failed to authorize", }, 400
 
         if response_oauth is None:
             error_response = {
@@ -66,10 +70,13 @@ class DiscordLogin(BaseResource):
 
         if "access_token" in tokens:
             discord_access_token = tokens["access_token"]
-            response_user = requests.get(
-                "https://discordapp.com/api/users/@me",
-                headers={"Authorization": f"Bearer {discord_access_token}"},
-            )
+            try:
+                response_user = requests.get(
+                    "https://discordapp.com/api/users/@me",
+                    headers={"Authorization": f"Bearer {discord_access_token}"},
+                )
+            except:
+                return { "message": "Failed to get user data", }, 400
 
         if response_user is None:
             error_response = {
@@ -78,10 +85,14 @@ class DiscordLogin(BaseResource):
             }
             return error_response
 
-        reg = requests.get(
-            "https://discordapp.com/api/users/@me/guilds",
-            headers={"Authorization": f"Bearer {tokens['access_token']}"},
-        )
+        try:
+            reg = requests.get(
+                "https://discordapp.com/api/users/@me/guilds",
+                headers={"Authorization": f"Bearer {tokens['access_token']}"},
+            )
+        except:
+            return {"message": "Failed to get guilds data", }, 400
+
         guilds_response = reg.json()
 
         if "global" in guilds_response:
