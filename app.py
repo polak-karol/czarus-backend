@@ -27,10 +27,12 @@ from resources.client_authorization import ClientAuthorization
 from resources.discord import DiscordGuildChannels
 from resources.guild_settings import GuildSettings, GuildSettingsList
 from resources.guild_channels import GuildChannels
+from default_config import SQLALCHEMY_DATABASE_URI
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 load_dotenv(".env", verbose=True)
+print(SQLALCHEMY_DATABASE_URI)
 app.config.from_object("default_config")
 app.config.from_envvar("APPLICATION_SETTINGS")
 api = Api(app)
