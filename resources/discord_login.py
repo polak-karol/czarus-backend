@@ -122,7 +122,7 @@ class DiscordLogin(BaseResource):
         if user:
             user_query.update(discord_user)
         else:
-            user = user_schema.load(discord_user, session=db_session)
+            user = user_schema.load(cls.recursive_camelize(discord_user), session=db_session)
 
         user.save_to_db()
 
