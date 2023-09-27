@@ -31,16 +31,13 @@ class BaseResource(Resource):
     @classmethod
     def recursive_snake_case(cls, data):
         if isinstance(data, dict):
-            return {cls.__snake_case(key): cls.__snake_case(value) for key, value in data.items()}
+            return {cls.__snake_case(key): cls.recursive_snake_case(value) for key, value in data.items()}
         elif isinstance(data, list):
-            return [cls.__snake_case(item) for item in data]
+            return [cls.recursive_snake_case(item) for item in data]
         else:
             return data
 
     @classmethod
     def __snake_case(cls, snake_str):
-        if isinstance(snake_str, bool):
-            return snake_str
-
         return ''.join(['_' + i.lower() if i.isupper() else i for i in snake_str]).lstrip('_')
 
