@@ -18,4 +18,4 @@ class DiscordGuildChannels(BaseResource):
         if "code" in channels:
             return {"message": "Can't fetch data"}, 400
 
-        return {"data": channels}, 200
+        return {"data": cls.recursive_camelize(channels)}, 200
