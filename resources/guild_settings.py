@@ -21,7 +21,7 @@ class GuildSettings(BaseResource):
         guild_settings = guild_settings_query.first()
 
         if guild_settings:
-            guild_settings_query.update(guild_settings_json)
+            guild_settings_query.update(cls.recursive_snake_case(guild_settings_json))
         else:
             guild_settings = guild_settings_schema.load(cls.recursive_camelize(guild_settings_json))
 
