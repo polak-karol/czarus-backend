@@ -10,7 +10,7 @@ class BaseResource(Resource):
     not_authorized_response = {"message": "You are not authorized"}, 401
 
     @classmethod
-    def to_snake(cls, string):
+    def to_snake(cls, string: str):
         return re.sub("([A-Z]\w+$)", "_\\1", string).lower()
 
     @classmethod
@@ -20,7 +20,7 @@ class BaseResource(Resource):
         ) == os.getenv("BOT_AUTHORIZATION_TOKEN")
 
     @classmethod
-    def recursive_camelize(cls, data):
+    def recursive_camelize(cls, data: any):
         if isinstance(data, dict):
             return {inflection.camelize(key, False): cls.recursive_camelize(value) for key, value in data.items()}
         elif isinstance(data, list):
@@ -29,7 +29,7 @@ class BaseResource(Resource):
             return data
 
     @classmethod
-    def recursive_snake_case(cls, data):
+    def recursive_snake_case(cls, data: any):
         if isinstance(data, dict):
             return {cls.__snake_case(key): cls.recursive_snake_case(value) for key, value in data.items()}
         elif isinstance(data, list):
@@ -38,6 +38,6 @@ class BaseResource(Resource):
             return data
 
     @classmethod
-    def __snake_case(cls, snake_str):
-        return ''.join(['_' + i.lower() if i.isupper() else i for i in snake_str]).lstrip('_')
+    def __snake_case(cls, string: str):
+        return ''.join(['_' + i.lower() if i.isupper() else i for i in string]).lstrip('_')
 

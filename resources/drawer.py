@@ -12,24 +12,22 @@ drawer_schema = DrawerSchema()
 class Drawer(BaseResource):
     @classmethod
     @jwt_required(optional=True)
-    def get(cls, guild_id):
+    def get(cls, guild_id: str):
         if not cls.is_client_authorized():
             return cls.not_authorized_response
-        print(guild_id)
+
         drawer = DrawerModel.find_drawer(
             guild_id, request.args["user_id"], request.args["draw_type"]
         ).first()
 
-        if drawer:
-            return drawer_schema.dump(drawer), 200
-
-        return {'msg': 'Not found.'}, 404
+        return drawer_schema.dump(drawer), 200
 
     @classmethod
     @jwt_required(optional=True)
-    def put(cls, guild_id):
+    def put(cls, guild_id: str):
         if not cls.is_client_authorized():
             return cls.not_authorized_response
+
         drawer_json = request.get_json()
         drawer_json["guildId"] = guild_id
         drawer_snake = cls.recursive_snake_case(drawer_json)
@@ -41,7 +39,7 @@ class Drawer(BaseResource):
         if drawer:
             if DateTimeHelper.is_date_in_current_week(drawer.updated_at):
                 return {
-                    "msg": "User already draw in this week.",
+                    "message": "User already draw in this week.",
                     "lastVoteDate": drawer.updated_at.isoformat(),
                 }, 400
             drawer_query.update(drawer_snake)

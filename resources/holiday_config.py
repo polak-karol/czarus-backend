@@ -11,7 +11,7 @@ holiday_config_schema = HolidayConfigSchema()
 class HolidayConfig(BaseResource):
     @classmethod
     @jwt_required(optional=True)
-    def put(cls, guild_id):
+    def put(cls, guild_id: str):
         if not cls.is_client_authorized():
             return cls.not_authorized_response
 
@@ -31,7 +31,7 @@ class HolidayConfig(BaseResource):
 
     @classmethod
     @jwt_required(optional=True)
-    def get(cls, guild_id):
+    def get(cls, guild_id: str):
         if not cls.is_client_authorized():
             return cls.not_authorized_response
 
