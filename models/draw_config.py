@@ -9,8 +9,11 @@ class DrawConfigModel(BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     guild_id = db.Column(db.String(300), nullable=False)
     writing_config = db.Column(JSONB)
-    painting_config = db.Column(JSONB)
+    graphic_config = db.Column(JSONB)
     music_config = db.Column(JSONB)
+    draw_challenges_writing_handle_channel_id = db.Column(db.String(300), nullable=True)
+    draw_challenges_graphic_handle_channel_id = db.Column(db.String(300), nullable=True)
+    draw_challenges_music_handle_channel_id = db.Column(db.String(300), nullable=True)
 
     @classmethod
     def find_draw_config_by_guild_id(cls, guild_id: str) -> "DrawConfigModel":
