@@ -22,7 +22,10 @@ class BaseResource(Resource):
     @classmethod
     def recursive_camelize(cls, data: any):
         if isinstance(data, dict):
-            return {inflection.camelize(key, False): cls.recursive_camelize(value) for key, value in data.items()}
+            return {
+                inflection.camelize(key, False): cls.recursive_camelize(value)
+                for key, value in data.items()
+            }
         elif isinstance(data, list):
             return [cls.recursive_camelize(item) for item in data]
         else:
@@ -31,7 +34,10 @@ class BaseResource(Resource):
     @classmethod
     def recursive_snake_case(cls, data: any):
         if isinstance(data, dict):
-            return {cls.__snake_case(key): cls.recursive_snake_case(value) for key, value in data.items()}
+            return {
+                cls.__snake_case(key): cls.recursive_snake_case(value)
+                for key, value in data.items()
+            }
         elif isinstance(data, list):
             return [cls.recursive_snake_case(item) for item in data]
         else:
@@ -39,5 +45,6 @@ class BaseResource(Resource):
 
     @classmethod
     def __snake_case(cls, string: str):
-        return ''.join(['_' + i.lower() if i.isupper() else i for i in string]).lstrip('_')
-
+        return "".join(["_" + i.lower() if i.isupper() else i for i in string]).lstrip(
+            "_"
+        )

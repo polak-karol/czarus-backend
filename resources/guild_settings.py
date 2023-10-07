@@ -23,7 +23,9 @@ class GuildSettings(BaseResource):
         if guild_settings:
             guild_settings_query.update(cls.recursive_snake_case(guild_settings_json))
         else:
-            guild_settings = guild_settings_schema.load(cls.recursive_camelize(guild_settings_json))
+            guild_settings = guild_settings_schema.load(
+                cls.recursive_camelize(guild_settings_json)
+            )
 
         guild_settings.save_to_db()
 
@@ -41,7 +43,6 @@ class GuildSettings(BaseResource):
 
 
 class GuildSettingsList(BaseResource):
-
     @classmethod
     @jwt_required(optional=True)
     def get(cls):

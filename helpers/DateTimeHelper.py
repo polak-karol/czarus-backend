@@ -21,7 +21,11 @@ class DateTimeHelper:
         Returns boolean if date is in current week.
         """
         current_date = datetime.datetime.today()
-        last_week_day = cls.get_closest_date_of_weekday(current_date, 6).replace(hour=23, minute=59, second=59)
-        first_week_day = cls.get_closest_date_of_weekday(current_date, 0).replace(hour=0, minute=0, second=0)
+        last_week_day = cls.get_closest_date_of_weekday(current_date, 6).replace(
+            hour=23, minute=59, second=59
+        )
+        first_week_day = cls.get_closest_date_of_weekday(current_date, 0).replace(
+            hour=0, minute=0, second=0
+        )
 
         return last_week_day >= date >= first_week_day

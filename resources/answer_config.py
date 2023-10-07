@@ -23,7 +23,9 @@ class AnswerConfig(BaseResource):
         if answer_config:
             answer_config_query.update(cls.recursive_snake_case(answer_config_json))
         else:
-            answer_config = answer_config_schema.load(cls.recursive_camelize(answer_config_json))
+            answer_config = answer_config_schema.load(
+                cls.recursive_camelize(answer_config_json)
+            )
 
         answer_config.save_to_db()
 
@@ -41,7 +43,6 @@ class AnswerConfig(BaseResource):
 
 
 class AnswerConfigList(BaseResource):
-
     @classmethod
     @jwt_required(optional=True)
     def get(cls):

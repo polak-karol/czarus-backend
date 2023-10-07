@@ -23,7 +23,9 @@ class BirthdayConfig(BaseResource):
         if birthday_config:
             birthday_config_query.update(cls.recursive_snake_case(birthday_config_json))
         else:
-            birthday_config = birthday_config_schema.load(cls.recursive_camelize(birthday_config_json))
+            birthday_config = birthday_config_schema.load(
+                cls.recursive_camelize(birthday_config_json)
+            )
 
         birthday_config.save_to_db()
 
@@ -41,7 +43,6 @@ class BirthdayConfig(BaseResource):
 
 
 class BirthdayConfigList(BaseResource):
-
     @classmethod
     @jwt_required(optional=True)
     def get(cls):

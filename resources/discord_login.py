@@ -56,7 +56,9 @@ class DiscordLogin(BaseResource):
                 "https://discord.com/api/oauth2/token", data=data, headers=headers
             )
         except:
-            return {"message": "Failed to authorize", }, 400
+            return {
+                "message": "Failed to authorize",
+            }, 400
 
         if response_oauth is None:
             error_response = {
@@ -76,7 +78,9 @@ class DiscordLogin(BaseResource):
                     headers={"Authorization": f"Bearer {discord_access_token}"},
                 )
             except:
-                return { "message": "Failed to get user data", }, 400
+                return {
+                    "message": "Failed to get user data",
+                }, 400
 
         if response_user is None:
             error_response = {
@@ -91,7 +95,9 @@ class DiscordLogin(BaseResource):
                 headers={"Authorization": f"Bearer {tokens['access_token']}"},
             )
         except:
-            return {"message": "Failed to get guilds data", }, 400
+            return {
+                "message": "Failed to get guilds data",
+            }, 400
 
         guilds_response_json = guilds_response.json()
 
@@ -122,7 +128,9 @@ class DiscordLogin(BaseResource):
         if user:
             user_query.update(discord_user)
         else:
-            user = user_schema.load(cls.recursive_camelize(discord_user), session=db_session)
+            user = user_schema.load(
+                cls.recursive_camelize(discord_user), session=db_session
+            )
 
         user.save_to_db()
 
@@ -143,8 +151,7 @@ class DiscordLogin(BaseResource):
     @classmethod
     def _is_guild_administrator(cls, permissions: int):
         return (
-            permissions & cls._administrator_permission
-            == cls._administrator_permission
+            permissions & cls._administrator_permission == cls._administrator_permission
         )
 
     @classmethod
