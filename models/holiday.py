@@ -18,7 +18,7 @@ class HolidayModel(BaseModel):
         return cls.query.filter(cls.guild_id == guild_id, cls.date == date)
 
     @classmethod
-    def find_holidays_in_range(cls, guild_id: str, dates):
+    def find_holidays_in_range(cls, guild_id: str, dates) -> "HolidayModel":
         start_date = date.fromisoformat(dates["startDate"])
         end_date = date.fromisoformat(dates["endDate"])
 

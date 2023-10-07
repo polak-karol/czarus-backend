@@ -11,9 +11,9 @@ class BirthdayConfigModel(BaseModel):
     guild_id = db.Column(db.String(300), nullable=False, unique=True)
 
     @classmethod
-    def find_birthday_config(cls, guild_id):
+    def find_birthday_config(cls, guild_id: str) -> "BirthdayConfigModel":
         return cls.query.filter_by(guild_id=guild_id)
 
     @classmethod
-    def get_all_config(cls):
+    def get_all_config(cls) -> "BirthdayConfigModel":
         return cls.query
