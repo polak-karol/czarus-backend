@@ -2,7 +2,7 @@ from db import db
 from models.base import BaseModel
 
 
-class HolidayConfigsModel(BaseModel):
+class HolidayConfigModel(BaseModel):
     __tablename__ = "holiday_configs"
 
     id = db.Column(db.Integer, primary_key=True)
