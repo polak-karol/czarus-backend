@@ -41,13 +41,13 @@ class User(BaseResource):
             }
             return error_response
 
-        reg = requests.get(
+        guilds_response = requests.get(
             "https://discordapp.com/api/users/@me/guilds",
             headers={"Authorization": f"Bearer {user.discord_access_token}"},
         )
-        guilds_response = reg.json()
+        guilds_response_json = guilds_response.json()
 
-        if "global" in guilds_response:
+        if "global" in guilds_response_json:
             error_response = {
                 "error": request.args["error"],
                 "error_description": request.args["error_description"],
@@ -57,9 +57,11 @@ class User(BaseResource):
         return {
             "data": {
                 "user": dump_user_schema.dump(user),
-                "guilds": cls.recursive_camelize(cls._format_guilds_with_administrator_permission(
-                    guilds_response
-                )),
+                "guilds": cls.recursive_camelize(
+                    cls._format_guilds_with_administrator_permission(
+                        guilds_response_json
+                    )
+                ),
             }
         }, 200
 

@@ -12,20 +12,17 @@ holiday_schema = HolidaySchema()
 class Holiday(BaseResource):
     @classmethod
     @jwt_required(optional=True)
-    def get(cls, guild_id):
+    def get(cls, guild_id: str):
         if not cls.is_client_authorized():
             return cls.not_authorized_response
 
         holiday = HolidayModel.find_holiday(guild_id, request.args["date"]).first()
 
-        if not holiday:
-            return {"msg": "Not found"}, 404
-
         return {"data": holiday_schema.dump(holiday)}, 200
 
     @classmethod
     @jwt_required(optional=True)
-    def put(cls, guild_id):
+    def put(cls, guild_id: str):
         if not cls.is_client_authorized():
             return cls.not_authorized_response
 
@@ -50,13 +47,10 @@ class Holiday(BaseResource):
 class HolidayList(BaseResource):
     @classmethod
     @jwt_required(optional=True)
-    def get(cls, guild_id):
+    def get(cls, guild_id: str):
         if not cls.is_client_authorized():
             return cls.not_authorized_response
 
         holidays = HolidayModel.find_holidays_in_range(guild_id, request.args)
-
-        if not holidays:
-            return {"msg": "Not found"}, 404
 
         return {"data": holiday_schema.dump(holidays, many=True)}, 200

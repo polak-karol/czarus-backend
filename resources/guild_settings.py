@@ -11,7 +11,7 @@ guild_settings_schema = GuildSettingsSchema()
 class GuildSettings(BaseResource):
     @classmethod
     @jwt_required(optional=True)
-    def put(cls, guild_id):
+    def put(cls, guild_id: str):
         if not cls.is_client_authorized():
             return cls.not_authorized_response
 
@@ -23,7 +23,9 @@ class GuildSettings(BaseResource):
         if guild_settings:
             guild_settings_query.update(cls.recursive_snake_case(guild_settings_json))
         else:
-            guild_settings = guild_settings_schema.load(cls.recursive_camelize(guild_settings_json))
+            guild_settings = guild_settings_schema.load(
+                cls.recursive_camelize(guild_settings_json)
+            )
 
         guild_settings.save_to_db()
 
@@ -31,7 +33,7 @@ class GuildSettings(BaseResource):
 
     @classmethod
     @jwt_required(optional=True)
-    def get(cls, guild_id):
+    def get(cls, guild_id: str):
         if not cls.is_client_authorized():
             return cls.not_authorized_response
 
@@ -41,7 +43,6 @@ class GuildSettings(BaseResource):
 
 
 class GuildSettingsList(BaseResource):
-
     @classmethod
     @jwt_required(optional=True)
     def get(cls):

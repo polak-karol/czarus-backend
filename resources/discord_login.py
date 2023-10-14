@@ -56,7 +56,9 @@ class DiscordLogin(BaseResource):
                 "https://discord.com/api/oauth2/token", data=data, headers=headers
             )
         except:
-            return {"message": "Failed to authorize", }, 400
+            return {
+                "message": "Failed to authorize",
+            }, 400
 
         if response_oauth is None:
             error_response = {
@@ -76,7 +78,9 @@ class DiscordLogin(BaseResource):
                     headers={"Authorization": f"Bearer {discord_access_token}"},
                 )
             except:
-                return { "message": "Failed to get user data", }, 400
+                return {
+                    "message": "Failed to get user data",
+                }, 400
 
         if response_user is None:
             error_response = {
@@ -86,16 +90,18 @@ class DiscordLogin(BaseResource):
             return error_response
 
         try:
-            reg = requests.get(
+            guilds_response = requests.get(
                 "https://discordapp.com/api/users/@me/guilds",
                 headers={"Authorization": f"Bearer {tokens['access_token']}"},
             )
         except:
-            return {"message": "Failed to get guilds data", }, 400
+            return {
+                "message": "Failed to get guilds data",
+            }, 400
 
-        guilds_response = reg.json()
+        guilds_response_json = guilds_response.json()
 
-        if "global" in guilds_response:
+        if "global" in guilds_response_json:
             error_response = {
                 "error": request.args["error"],
                 "error_description": request.args["error_description"],
@@ -103,14 +109,10 @@ class DiscordLogin(BaseResource):
             return error_response
 
         discord_user = response_user.json()
-        discord_user["discord_access_token"] = discord_access_token
 
         guilds_with_admin_permission = cls._format_guilds_with_administrator_permission(
-            guilds_response
+            guilds_response_json
         )
-
-        if discord_user["id"] == 277901799833206785:
-            guilds_with_admin_permission = guilds_response
 
         discord_user["guild_ids"] = [
             guild["id"] for guild in guilds_with_admin_permission
@@ -126,7 +128,9 @@ class DiscordLogin(BaseResource):
         if user:
             user_query.update(discord_user)
         else:
-            user = user_schema.load(cls.recursive_camelize(discord_user), session=db_session)
+            user = user_schema.load(
+                cls.recursive_camelize(discord_user), session=db_session
+            )
 
         user.save_to_db()
 
@@ -145,19 +149,18 @@ class DiscordLogin(BaseResource):
         }, 200
 
     @classmethod
-    def _is_guild_administrator(cls, permissions):
+    def _is_guild_administrator(cls, permissions: int):
         return (
-            int(permissions) & cls._administrator_permission
-            == cls._administrator_permission
+            permissions & cls._administrator_permission == cls._administrator_permission
         )
 
     @classmethod
-    def _format_guilds_with_administrator_permission(cls, guilds):
+    def _format_guilds_with_administrator_permission(cls, guilds: bytearray):
         if not guilds:
             return guilds
 
         return [
             guild
             for guild in guilds
-            if cls._is_guild_administrator(guild["permissions_new"])
+            if cls._is_guild_administrator(int(guild["permissions_new"]))
         ]

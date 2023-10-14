@@ -11,7 +11,7 @@ holiday_config_schema = HolidayConfigSchema()
 class HolidayConfig(BaseResource):
     @classmethod
     @jwt_required(optional=True)
-    def put(cls, guild_id):
+    def put(cls, guild_id: str):
         if not cls.is_client_authorized():
             return cls.not_authorized_response
 
@@ -23,7 +23,9 @@ class HolidayConfig(BaseResource):
         if holiday_config:
             holiday_config_query.update(cls.recursive_snake_case(holiday_config_json))
         else:
-            holiday_config = holiday_config_schema.load(cls.recursive_camelize(holiday_config_json))
+            holiday_config = holiday_config_schema.load(
+                cls.recursive_camelize(holiday_config_json)
+            )
 
         holiday_config.save_to_db()
 
@@ -31,7 +33,7 @@ class HolidayConfig(BaseResource):
 
     @classmethod
     @jwt_required(optional=True)
-    def get(cls, guild_id):
+    def get(cls, guild_id: str):
         if not cls.is_client_authorized():
             return cls.not_authorized_response
 
@@ -41,7 +43,6 @@ class HolidayConfig(BaseResource):
 
 
 class HolidayConfigList(BaseResource):
-
     @classmethod
     @jwt_required(optional=True)
     def get(cls):

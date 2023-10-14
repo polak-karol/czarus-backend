@@ -11,7 +11,7 @@ answer_config_schema = AnswerConfigSchema()
 class AnswerConfig(BaseResource):
     @classmethod
     @jwt_required(optional=True)
-    def put(cls, guild_id):
+    def put(cls, guild_id: str):
         if not cls.is_client_authorized():
             return cls.not_authorized_response
 
@@ -23,7 +23,9 @@ class AnswerConfig(BaseResource):
         if answer_config:
             answer_config_query.update(cls.recursive_snake_case(answer_config_json))
         else:
-            answer_config = answer_config_schema.load(cls.recursive_camelize(answer_config_json))
+            answer_config = answer_config_schema.load(
+                cls.recursive_camelize(answer_config_json)
+            )
 
         answer_config.save_to_db()
 
@@ -31,7 +33,7 @@ class AnswerConfig(BaseResource):
 
     @classmethod
     @jwt_required(optional=True)
-    def get(cls, guild_id):
+    def get(cls, guild_id: str):
         if not cls.is_client_authorized():
             return cls.not_authorized_response
 
@@ -41,7 +43,6 @@ class AnswerConfig(BaseResource):
 
 
 class AnswerConfigList(BaseResource):
-
     @classmethod
     @jwt_required(optional=True)
     def get(cls):

@@ -19,9 +19,6 @@ class Birthday(BaseResource):
             guild_id, request.args["user_id"]
         ).first()
 
-        if not birthday:
-            return {"msg": "Not found"}, 404
-
         return {"data": birthday_schema.dump(birthday)}, 200
 
     @classmethod
@@ -56,12 +53,9 @@ class Birthday(BaseResource):
             guild_id, request.args["user_id"]
         ).first()
 
-        if not birthday:
-            return {"msg": "Item not found"}, 404
-
         birthday.delete_from_db()
 
-        return {"msg": "Item deleted"}, 200
+        return {"message": "Item deleted"}, 200
 
 
 class BirthdayList(BaseResource):
@@ -77,8 +71,5 @@ class BirthdayList(BaseResource):
             )
         else:
             birthdays = BirthdayModel.find_birthday_by_guild_id(guild_id)
-
-        if not birthdays:
-            return {"msg": "Not found"}, 404
 
         return {"data": birthday_schema.dump(birthdays, many=True)}, 200
