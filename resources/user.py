@@ -47,7 +47,7 @@ class User(BaseResource):
         )
         guilds_response_json = guilds_response.json()
 
-        if "global" in guilds_response_json:
+        if "global" in guilds_response_json or "message" in guilds_response_json:
             error_response = {
                 "error": request.args["error"],
                 "error_description": request.args["error_description"],
@@ -66,19 +66,18 @@ class User(BaseResource):
         }, 200
 
     @classmethod
-    def _is_guild_administrator(cls, permissions):
+    def _is_guild_administrator(cls, permissions: int):
         return (
-            int(permissions) & cls._administrator_permission
-            == cls._administrator_permission
+                permissions & cls._administrator_permission == cls._administrator_permission
         )
 
     @classmethod
-    def _format_guilds_with_administrator_permission(cls, guilds):
+    def _format_guilds_with_administrator_permission(cls, guilds: bytearray):
         if not guilds:
             return guilds
 
         return [
             guild
             for guild in guilds
-            if cls._is_guild_administrator(guild["permissions_new"])
+            if cls._is_guild_administrator(int(guild["permissions_new"]))
         ]

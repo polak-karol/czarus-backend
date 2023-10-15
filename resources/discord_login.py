@@ -109,6 +109,7 @@ class DiscordLogin(BaseResource):
             return error_response
 
         discord_user = response_user.json()
+        discord_user["discord_access_token"] = discord_access_token
 
         guilds_with_admin_permission = cls._format_guilds_with_administrator_permission(
             guilds_response_json
