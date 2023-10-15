@@ -38,10 +38,10 @@ class Drawer(BaseResource):
 
         if drawer:
             if DateTimeHelper.is_date_in_current_week(drawer.updated_at):
-                return {
+                return {"data": {
                     "message": "User already draw in this week.",
                     "lastVoteDate": drawer.updated_at.isoformat(),
-                }, 400
+                }}, 200
             drawer_query.update(drawer_snake)
         else:
             drawer = drawer_schema.load(drawer_json)
