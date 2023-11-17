@@ -29,6 +29,7 @@ from resources.guild_settings import GuildSettings, GuildSettingsList
 from resources.answer_config import AnswerConfig, AnswerConfigList
 from resources.birthday_config import BirthdayConfig, BirthdayConfigList
 from resources.holiday_config import HolidayConfig, HolidayConfigList
+from resources.guild_bans import GuildBans
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -85,6 +86,7 @@ api.add_resource(BirthdayConfig, "/birthday-config/<string:guild_id>")
 api.add_resource(BirthdayConfigList, "/birthday-config/list")
 api.add_resource(HolidayConfig, "/holiday-config/<string:guild_id>")
 api.add_resource(HolidayConfigList, "/holiday-config/<string:guild_id>")
+api.add_resource(GuildBans, "/guild-bans/<string:guild_id>")
 
 
 if __name__ == "__main__":
